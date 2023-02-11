@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { rotateVec2, addVec, radiansToDegrees, vecLength } from '$lib/math';
+	import Icon from './Icon.svelte';
 
 	type Option = {
 		value: string;
-		icon: string;
+		content?: string;
+		icon?: string;
 	};
 
 	export let items: Option[] = [];
@@ -28,10 +30,9 @@
 		const v = addVec(rotateVec2([0, -innerRadius / 2 - outerRadius / 2], angle), offsetVec);
 
 		return {
+			..._,
 			x: v[0],
 			y: v[1],
-			icon: _.icon,
-			value: _.value,
 			path: `M ${vi1[0]} ${vi1[1]} A ${innerRadius} ${innerRadius} 0 0 0 ${vi2[0]} ${vi2[1]} L ${
 				vo2[0]
 			} ${vo2[1]} A ${-outerRadius} ${-outerRadius} 0 0 1 ${vo1[0]} ${vo1[1]} Z`
@@ -100,7 +101,11 @@
 		{#each _items as item, i}
 			<div class="item-wrapper" class:active={i === index}>
 				<div class:item style="left:{item.x}px; top:{item.y}px;">
-					{item.icon}
+					{#if item.icon}
+						<Icon name={item.icon} />
+					{:else}
+						{item.content}
+					{/if}
 				</div>
 			</div>
 		{/each}
@@ -119,11 +124,6 @@
 			{#each _items as item, i}
 				<path d={item.path} class:active={index === i} />
 			{/each}
-
-			{#if 0 < 1}
-				{@const center = outerRadius + padding / 2}
-				<path d="M {center} {center} L {center + mouseVec[0]} {center + mouseVec[1]}" />
-			{/if}
 		</svg>
 	</div>
 </div>
@@ -161,8 +161,12 @@
 		transition: transform 0.2s ease;
 		height: 100%;
 		width: 100%;
-		transform: scale(1);
+		transform: scale(0.8);
 		z-index: 2;
+	}
+
+	.visible .item-wrapper {
+		transform: scale(1);
 	}
 
 	.active.item-wrapper {

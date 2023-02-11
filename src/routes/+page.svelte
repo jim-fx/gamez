@@ -6,12 +6,20 @@
 		console.log('Page loaded');
 	});
 
-	const items = new Array(9).fill(null).map((_, i) => {
-		return {
-			value: '' + i,
-			icon: `${i + 1}`
-		};
-	});
+	const items = [
+		{
+			value: 'forward',
+			icon: 'arrow-right'
+		},
+		{
+			value: 'back',
+			icon: 'arrow-left'
+		},
+		{
+			value: 'settings',
+			icon: 'settings'
+		}
+	];
 </script>
 
 <RadialMenu {items} />

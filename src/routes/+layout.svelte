@@ -1,5 +1,12 @@
 <script>
 	import '@fontsource/nunito';
+	import { onMount } from 'svelte';
+	import 'uno.css';
+	onMount(() => {
+		console.log('Page loaded');
+		//ts-ignore
+		import('virtual:unocss-devtools');
+	});
 </script>
 
 <slot />
