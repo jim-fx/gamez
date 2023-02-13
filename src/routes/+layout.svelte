@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { RadialMenu } from '$lib/components';
 	import '@fontsource/nunito';
 	import { onMount } from 'svelte';
@@ -13,8 +14,8 @@
 			content: 'sudoku'
 		},
 		{
-			value: 'kublot',
-			content: 'Kublot'
+			value: 'sokoban',
+			content: 'sokoban'
 		},
 		{
 			value: 'settings',
@@ -25,15 +26,15 @@
 	function handleSelect(e: CustomEvent<string>) {
 		console.log(e.detail);
 		if (e.detail === 'sudoku') {
-			goto('/g/sudoku');
+			goto(base + '/g/sudoku');
 		}
 
-		if (e.detail === 'kublot') {
-			goto('/g/kublot');
+		if (e.detail === 'sokoban') {
+			goto(base + '/g/sokoban');
 		}
 
 		if (e.detail === 'settings') {
-			goto('/settings');
+			goto(base + '/settings');
 		}
 	}
 
