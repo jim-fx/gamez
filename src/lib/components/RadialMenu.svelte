@@ -95,14 +95,7 @@
 		return target === e;
 	}
 
-	const wait = (time: number) => new Promise((res) => setTimeout(res, time));
-
 	async function handleMouseDown(e: MouseEvent) {
-		if (centerItem) {
-			await wait(50);
-			if (!visible) return;
-		}
-
 		if (context === true) return;
 		if (!checkIfValidTarget(e.target as HTMLElement)) return;
 		visible = true;

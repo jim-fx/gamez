@@ -95,14 +95,16 @@
 		width: fit-content;
 		height: fit-content;
 		box-sizing: border-box;
-		border-radius: 4px;
+		border-radius: 20px;
 		overflow: hidden;
 
+		filter: url(#noise);
 		background: linear-gradient(135.06deg, #16161e 3.85%, #252530 96.92%);
 
-		/* Outline */
-		border: 0.862857px solid #4b4e5a;
 		box-shadow: 0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25),
 			0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25), 0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25);
+
+		/* Outline */
+		border: 0.862857px solid var(--outline);
 	}
 </style>

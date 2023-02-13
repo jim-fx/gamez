@@ -59,8 +59,8 @@
 	}
 
 	.initial {
-		color: #f5f5f5ee;
-		font-weight: bold;
+		color: #f5f5f588;
+		/* font-weight: bold; */
 	}
 
 	.hovered {
