@@ -58,8 +58,7 @@ jobs:
     
       - name: Build
         run: pnpm build
-        with:
-          branch: "main"
+        env:
           BASE_PATH: ${{ env.BASE_PATH }}
         
       - name: Upload artifact
