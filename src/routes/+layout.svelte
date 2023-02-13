@@ -23,6 +23,8 @@
 		}
 	];
 
+	console.log({ base });
+
 	function handleSelect(e: CustomEvent<string>) {
 		console.log(e.detail);
 		if (e.detail === 'sudoku') {
