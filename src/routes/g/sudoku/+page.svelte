@@ -1,7 +1,13 @@
 <script lang="ts">
-	import { RadialMenu, Sudoku } from '$lib/components';
+	import { Sudoku } from '$lib/components';
+	import { getSudoku } from 'sudoku-gen';
 
-	const grid = Sudoku.makepuzzle();
+	function genSudoku() {
+		const d = getSudoku('easy');
+		return d.puzzle.split('').map((x) => (x === '-' ? null : parseInt(x)));
+	}
+
+	const grid = genSudoku();
 </script>
 
 <Sudoku {grid} />

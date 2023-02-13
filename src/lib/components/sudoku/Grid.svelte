@@ -36,9 +36,10 @@
 			return [row, col];
 		},
 		setCell: (i, value) => {
-			grid[i] = value;
+			grid[i] = typeof value === 'string' ? parseInt(value) : value;
 			grid = [...grid];
 			console.log('Set', i, value);
+			console.log(grid);
 		},
 		getCell: (i) => {
 			return grid[i];
@@ -76,7 +77,7 @@
 </script>
 
 <RadialMenu target={checkTarget} {items} on:select={handleSelect} />
-<svelte:window on:mouseup={() => context.setActiveIndex(-1)} />
+<svelte:window on:mouseup={() => context.activeIndex.set(-1)} />
 
 <div class="sudoku-wrapper">
 	{#each grid as cell, i}

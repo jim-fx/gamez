@@ -398,8 +398,8 @@
 		border-radius: 100%;
 		display: grid;
 		place-items: center;
-		width: var(--inner-radius);
-		height: var(--inner-radius);
+		width: calc(var(--inner-radius) + 4px);
+		height: calc(var(--inner-radius) + 4px);
 		background: var(--gradient);
 		color: var(--outline-strong);
 		cursor: pointer;
