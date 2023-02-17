@@ -22,8 +22,8 @@
 	const borderR = '10px';
 	const none = '0px';
 
-	const borderLarge = '1px';
-	const borderSmall = '0.5px';
+	const borderLarge = 'var(--outline-strong)';
+	const borderSmall = 'var(--outline)';
 </script>
 
 {#if value}
@@ -39,7 +39,7 @@
         ${hasCellRight || hasCellBelow ? none : borderR} 
         ${hasCellBelow || hasCellLeft ? none : borderR};
 
-      border-width: 
+      border-color: 
         ${hasCellAbove ? borderSmall : borderLarge} 
         ${hasCellRight ? borderSmall : borderLarge} 
         ${hasCellBelow ? borderSmall : borderLarge} 
@@ -65,7 +65,9 @@
 
 	.visible {
 		border: solid 0.5px white;
-		background-color: #000;
+
+		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2),
+			inset 2px 2px 9px rgba(255, 255, 255, 0.05), inset -2px -2px 9px rgba(0, 0, 0, 0.2);
 	}
 
 	.target::after {

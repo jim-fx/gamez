@@ -15,10 +15,10 @@ export enum Direction {
 
 export const defaultGame = {
   balls: [
-    10, 11,
+    6, 5
   ],
   targets: [
-    6, 5
+    10, 11,
   ],
   grid: [
     false,

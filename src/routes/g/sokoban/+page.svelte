@@ -1,8 +1,14 @@
 <script lang="ts">
 	import Sokoban from '$lib/components/sokoban';
+	let won = false;
 </script>
 
-<Sokoban targets={[10, 11]} width={5} height={5} balls={[6, 5]} />
+<div>
+	{#if won}
+		<h1>Won!</h1>
+	{/if}
+	<Sokoban bind:won />
+</div>
 
 <style>
 	:global(body) {

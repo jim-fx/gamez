@@ -12,8 +12,8 @@
 
 	$: isAtTarget = position === target;
 
-	$: x = 40 * cellX + 5;
-	$: y = 40 * cellY + 5;
+	$: x = 80 * cellX + 20;
+	$: y = 80 * cellY + 20;
 
 	let mouseDown: number[] | null = null;
 	let mouse: number[] = [];
@@ -56,8 +56,8 @@
 		opacity: 0.8;
 		border-radius: 100%;
 		transition: transform 0.5s;
-		width: calc(var(--cell-size) - 10px);
-		height: calc(var(--cell-size) - 10px);
+		width: calc(var(--cell-size) * 0.5);
+		height: calc(var(--cell-size) * 0.5);
 		transition: transform 0.5s, opacity 0.5s;
 		transform-origin: center;
 		user-select: none;

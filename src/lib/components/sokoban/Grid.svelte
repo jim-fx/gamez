@@ -30,6 +30,7 @@
 		return true;
 	}
 
+	export let won = false;
 	$: won = compare($_balls, targets);
 
 	function moveBall(ballIndex: number, dir: Direction) {
@@ -113,7 +114,7 @@
 		}
 	}
 
-	const cellSize = 40;
+	const cellSize = 80;
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
