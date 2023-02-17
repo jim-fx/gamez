@@ -199,7 +199,7 @@
 						values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
 						result="hardAlpha"
 					/>
-					<feOffset dx="1" dy="1" />
+					<feOffset dx="-5" dy="-5" />
 					<feGaussianBlur stdDeviation="3.5" />
 					<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
 					<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
@@ -214,7 +214,7 @@
 						values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
 						result="hardAlpha"
 					/>
-					<feOffset dx="12" dy="-5" />
+					<feOffset dx="5" dy="5" />
 					<feGaussianBlur stdDeviation="10" />
 					<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
 					<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
@@ -270,32 +270,20 @@
 					<stop offset="10%" stop-color="#16161E" />
 					<stop offset="95%" stop-color="#252530" />
 				</radialGradient>
-				<filter id="noise" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse">
+				<filter id="n" x="0" y="0">
 					<feTurbulence
 						type="fractalNoise"
-						baseFrequency="0.2"
-						numOctaves="8"
+						baseFrequency="0.7"
+						numOctaves="10"
 						stitchTiles="stitch"
-						result="turbulence"
 					/>
-					<feSpecularLighting
-						surfaceScale="5"
-						specularConstant="0.75"
-						specularExponent="20"
-						lighting-color={isFirefox ? '#050505' : '#191919'}
-						in="turbulence"
-						result="specularLighting"
-					>
-						<feDistantLight azimuth="3" elevation="100" />
-					</feSpecularLighting>
-
-					<feBlend in="SourceGraphic" in2="noisy" mode="lighten" />
 				</filter>
 			</defs>
 			<g filter="url(#big-shadow)">
 				{#each _items as item, i}
-					<g class="segment" class:active={index === i}>
+					<g class="segment" class:active={index === i} filter="url(#small-shadow)">
 						<path d={item.path} fill="#252530" clip-path="url(#segment-{i})" />
+						<path d={item.path} filter="url(#n)" clip-path="url(#segment-{i})" opacity="0.1" />
 					</g>
 				{/each}
 			</g>
@@ -372,15 +360,11 @@
 		transition: transform 0.2s ease, filter 0.3s ease, stroke 0.3s ease;
 		transform-origin: var(--width) var(--width);
 		cursor: pointer;
-		filter: url(#noise);
+		/* filter: url(#n); */
 	}
 
 	.segment {
 		transition: filter 0.3s ease;
-	}
-
-	.segment.active {
-		filter: url(#small-shadow);
 	}
 
 	.segment.active > path {

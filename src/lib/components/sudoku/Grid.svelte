@@ -38,8 +38,6 @@
 		setCell: (i, value) => {
 			grid[i] = typeof value === 'string' ? parseInt(value) : value;
 			grid = [...grid];
-			console.log('Set', i, value);
-			console.log(grid);
 		},
 		getCell: (i) => {
 			return grid[i];
@@ -98,13 +96,15 @@
 		border-radius: 20px;
 		overflow: hidden;
 
-		filter: url(#noise);
-		background: linear-gradient(135.06deg, #16161e 3.85%, #252530 96.92%);
+		background-image: url('data:image/svg+xml;base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCI+CjxmaWx0ZXIgaWQ9Im4iIHg9IjAiIHk9IjAiPgo8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC43IiBudW1PY3RhdmVzPSIxMCIgc3RpdGNoVGlsZXM9InN0aXRjaCI+PC9mZVR1cmJ1bGVuY2U+CjwvZmlsdGVyPgo8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzAwMCI+PC9yZWN0Pgo8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIwLjEiPjwvcmVjdD4KPC9zdmc+'),
+			linear-gradient(-20deg, #16161e 3.85%, #252530 96.92%);
+		background-blend-mode: screen;
 
-		box-shadow: 0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25),
-			0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25), 0px 3.45143px 3.45143px rgba(0, 0, 0, 0.25);
+		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2),
+			inset 2px 2px 9px rgba(255, 255, 255, 0.05), inset -2px -2px 9px rgba(0, 0, 0, 0.2);
 
 		/* Outline */
-		border: 0.862857px solid var(--outline);
+		outline: 1px solid var(--outline);
+		border: none;
 	}
 </style>

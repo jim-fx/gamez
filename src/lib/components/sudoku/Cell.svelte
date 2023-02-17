@@ -20,9 +20,17 @@
 	$: hoveredSquare = Math.floor(hoveredRow / 3) * 3 + Math.floor(hoveredCol / 3);
 
 	const borderRight =
-		col === 2 || col === 5 ? '1.5px solid var(--outline-strong)' : '1px solid var(--outline)';
+		col === 8
+			? ''
+			: col === 2 || col === 5
+			? '1px solid var(--outline-strong)'
+			: '1px solid var(--outline)';
 	const borderBottom =
-		row === 2 || row === 5 ? '1.5px solid var(--outline-strong)' : '1px solid var(--outline)';
+		row === 8
+			? ''
+			: row === 2 || row === 5
+			? '1px solid var(--outline-strong)'
+			: '1px solid var(--outline)';
 </script>
 
 <div
