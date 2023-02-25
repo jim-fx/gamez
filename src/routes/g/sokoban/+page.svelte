@@ -4,9 +4,6 @@
 </script>
 
 <div>
-	{#if won}
-		<h1>Won!</h1>
-	{/if}
 	<Sokoban bind:won />
 </div>
 

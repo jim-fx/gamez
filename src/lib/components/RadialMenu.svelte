@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isFirefox } from '$lib/detect';
+	import { nanoid } from 'nanoid';
 	import { rotateVec2, addVec, radiansToDegrees, vecLength } from '$lib/math';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
@@ -14,10 +15,13 @@
 	export let items: Option[] = [];
 	export let innerRadius = 30;
 	export let outerRadius = 100;
+	export let rotation = 0;
 	export let context: boolean | null = null;
 	export let target: HTMLElement | ((e: HTMLElement) => boolean) | null = null;
 	let visible = false;
 	const padding = 30;
+
+	const menuId = nanoid();
 
 	const dispatch = createEventDispatcher();
 
@@ -32,7 +36,7 @@
 
 	$: singleRadius = 360 / __items.length;
 	$: _items = __items.map((_, i) => {
-		const angle = singleRadius * i;
+		const angle = singleRadius * i + rotation;
 
 		const offsetVec = [outerRadius + padding / 2, outerRadius + padding / 2];
 
@@ -62,7 +66,7 @@
 
 	function calculateAngle(vec: number[]) {
 		const angle = radiansToDegrees(Math.atan2(vec[0], vec[1]));
-		return 180 - angle;
+		return 180 - angle - rotation;
 	}
 
 	$: angle = calculateAngle(mouseVec);
@@ -96,16 +100,22 @@
 	}
 
 	async function handleMouseDown(e: MouseEvent) {
-		if (context === true) return;
+		if ((context === true && e.button !== 2) || (context !== true && e.button === 2)) return;
+		console.log('handleMouseDown', e);
 		if (!checkIfValidTarget(e.target as HTMLElement)) return;
 		visible = true;
 		mouseDown = [e.clientX, e.clientY];
 		mouse = [e.clientX, e.clientY];
+		e.preventDefault();
+		e.stopPropagation();
 	}
-	function handleMouseUp() {
+	function handleMouseUp(e: MouseEvent) {
+		console.log('handleMouseUp');
 		visible = false;
 		if (length < innerRadius && centerItem) {
 			dispatch('select', centerItem.value);
+			e.preventDefault();
+			e.stopPropagation();
 			return;
 		}
 		if (index !== -1) dispatch('select', __items[index].value);
@@ -171,7 +181,7 @@
 		>
 			<defs>
 				{#each _items as item, i}
-					<clipPath id="segment-{i}">
+					<clipPath id="segment-{menuId}-{i}">
 						<path fill="currentColor" d={item.path} />
 					</clipPath>
 				{/each}
@@ -282,8 +292,13 @@
 			<g filter="url(#big-shadow)">
 				{#each _items as item, i}
 					<g class="segment" class:active={index === i} filter="url(#small-shadow)">
-						<path d={item.path} fill="#252530" clip-path="url(#segment-{i})" />
-						<path d={item.path} filter="url(#n)" clip-path="url(#segment-{i})" opacity="0.1" />
+						<path d={item.path} fill="#252530" clip-path="url(#segment-{menuId}-{i})" />
+						<path
+							d={item.path}
+							filter="url(#n)"
+							clip-path="url(#segment-{menuId}-{i})"
+							opacity="0.1"
+						/>
 					</g>
 				{/each}
 			</g>
@@ -323,22 +338,12 @@
 		transition: transform 0.2s ease;
 		height: 100%;
 		width: 100%;
-		transform: scale(0.8);
 		z-index: 2;
-	}
-
-	.visible .item-wrapper {
-		transform: scale(1);
-	}
-
-	.active.item-wrapper {
-		transform: scale(1.1);
 	}
 
 	svg {
 		transform-origin: var(--width) var(--width);
 		overflow: scroll;
-		transform: scale3d(0.8, 0.8, 1);
 		opacity: 0;
 		transition: transform 0.2s ease, filter 0.3s ease, opacity 0.2s ease;
 		filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.2));
@@ -346,31 +351,28 @@
 
 	.visible svg {
 		opacity: 1;
-		transform: scale3d(1, 1, 1);
 		filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.2));
 	}
 
 	svg:hover {
-		filter: drop-shadow(0px 0px 26px rgba(0, 0, 0, 0.8));
+		/* filter: drop-shadow(0px 0px 26px rgba(0, 0, 0, 0.8)); */
 	}
 
 	path {
 		stroke: var(--outline);
 		stroke-width: 1;
-		transition: transform 0.2s ease, filter 0.3s ease, stroke 0.3s ease;
-		transform-origin: var(--width) var(--width);
+		transition: transform 0.1s ease, filter 0.1s ease, stroke 0.1s ease;
 		cursor: pointer;
 		/* filter: url(#n); */
 	}
 
 	.segment {
-		transition: filter 0.3s ease;
+		transition: filter 0.1s ease;
 	}
 
 	.segment.active > path {
 		stroke-width: 1.5;
 		stroke: var(--outline-strong);
-		transform: scale3d(1.1, 1.1, 1.1);
 		z-index: 99;
 	}
 

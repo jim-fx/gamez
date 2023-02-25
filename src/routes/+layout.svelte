@@ -45,7 +45,7 @@
 	});
 </script>
 
-<RadialMenu target={body} {items} on:select={handleSelect} />
+<!-- <RadialMenu target={body} {items} on:select={handleSelect} /> -->
 <svelte:body bind:this={body} />
 
 <slot />

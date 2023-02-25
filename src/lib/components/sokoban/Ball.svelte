@@ -12,8 +12,8 @@
 
 	$: isAtTarget = position === target;
 
-	$: x = 80 * cellX + 20;
-	$: y = 80 * cellY + 20;
+	$: x = 80 * cellX - 1;
+	$: y = 80 * cellY;
 
 	let mouseDown: number[] | null = null;
 	let mouse: number[] = [];
@@ -40,32 +40,36 @@
 	}
 </script>
 
-<div
-	class="ball"
-	class:isAtTarget
-	on:mousedown={handleMouseDown}
-	style={`--x: ${x}px; --y: ${y}px; background-color: ${colors[index]};`}
-/>
+<div class="ball-wrapper" style={`--x: ${x}px; --y: ${y}px;`} on:mousedown={handleMouseDown}>
+	<div class="ball" class:isAtTarget style={`background-color: ${colors[index]};`} />
+</div>
 
 <svelte:window on:mouseup={handleMouseUp} on:mousemove={handleMouseMove} />
 
 <style>
-	.ball {
+	.ball-wrapper {
 		position: absolute;
+		width: var(--cell-size);
+		height: var(--cell-size);
+		transform: translate(var(--x), var(--y)) scale(1);
+		transition: transform 0.5s, opacity 0.5s;
+		display: grid;
+		place-items: center;
+	}
+
+	.ball {
 		z-index: 1;
 		opacity: 0.8;
 		border-radius: 100%;
 		transition: transform 0.5s;
 		width: calc(var(--cell-size) * 0.5);
-		height: calc(var(--cell-size) * 0.5);
-		transition: transform 0.5s, opacity 0.5s;
 		transform-origin: center;
+		height: calc(var(--cell-size) * 0.5);
 		user-select: none;
-		transform: translate(var(--x), var(--y)) scale(1);
 	}
 
 	.isAtTarget {
-		transform: translate(var(--x), var(--y)) scale(0.5);
+		transform: scale(0.8);
 		opacity: 1;
 	}
 </style>

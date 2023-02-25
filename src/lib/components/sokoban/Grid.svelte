@@ -4,11 +4,14 @@
 	import { getContext, setContext } from './context';
 	import { Direction, defaultGame } from './constants';
 	import historyStore from '../historyStore';
+	import RadialMenu from '../RadialMenu.svelte';
 	export let width: number = 5;
 	export let height: number = 5;
 	export let grid: boolean[] = defaultGame.grid;
 	export let balls: number[] = defaultGame.balls;
 	export let targets: number[] = defaultGame.targets;
+
+	let wrapper: HTMLElement;
 
 	function arrayToMap<T>(arr: T[]) {
 		const map = new Map();
@@ -115,11 +118,36 @@
 	}
 
 	const cellSize = 80;
+
+	const items = [
+		{
+			value: 'undo',
+			content: 'Undo'
+		},
+		{
+			value: 'redo',
+			content: 'Redo'
+		}
+	];
+
+	function handleSelect(e: CustomEvent) {
+		if (e.detail === 'undo') {
+			_balls.undo();
+		} else if (e.detail === 'redo') {
+			_balls.redo();
+		}
+	}
+
+	function checkTarget(e: HTMLElement) {
+		return e.classList.contains('gamer-wrapper') || e.classList.contains('grid-wrapper');
+	}
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
 
-<div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`}>
+<RadialMenu target={checkTarget} context {items} on:select={handleSelect} rotation={-90} />
+
+<div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
 	{#each $_balls as pos, i}
 		<Ball index={i} position={pos} target={targets[i]} />
 	{/each}
