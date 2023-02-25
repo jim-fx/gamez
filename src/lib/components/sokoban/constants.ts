@@ -5,6 +5,7 @@ export const colors = [
   "#4FFFB5",
 ]
 
+export const cellSize = 80;
 
 export enum Direction {
   UP,

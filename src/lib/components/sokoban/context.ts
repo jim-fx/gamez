@@ -10,6 +10,7 @@ export type Context = {
   getIndex: (row: number, col: number) => number,
   getCell: (index: number) => boolean | null,
   moveBall: (index: number, direction: number) => void,
+  getPossibleMoves: (index: number) => number[],
 }
 
 type getContext = (key: string) => Context;

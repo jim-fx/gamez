@@ -2,8 +2,8 @@
 	import Cell from './Cell.svelte';
 	import Ball from './Ball.svelte';
 	import { getContext, setContext } from './context';
-	import { Direction, defaultGame } from './constants';
-	import historyStore from '../historyStore';
+	import { Direction, defaultGame, cellSize } from './constants';
+	import historyStore from '$lib/historyStore';
 	import RadialMenu from '../RadialMenu.svelte';
 	export let width: number = 5;
 	export let height: number = 5;
@@ -25,6 +25,7 @@
 	$: _targets = arrayToMap(targets);
 
 	const _balls = historyStore(balls);
+	const historyIndex = _balls.activeIndex;
 
 	function compare<T>(a: T[], b: T[]) {
 		for (const i in a) {
@@ -36,8 +37,7 @@
 	export let won = false;
 	$: won = compare($_balls, targets);
 
-	function moveBall(ballIndex: number, dir: Direction) {
-		if (won) return;
+	function calculateNextPosition(ballIndex: number, dir: Direction) {
 		let ballPos = $_balls[ballIndex];
 
 		const ballPositions = new Set();
@@ -66,11 +66,24 @@
 
 			ballPos = nextPos;
 		}
+		return ballPos;
+	}
+
+	function moveBall(ballIndex: number, dir: Direction) {
+		if (won) return;
+
+		const ballPos = calculateNextPosition(ballIndex, dir);
 
 		const _b = [...$_balls];
 		_b[ballIndex] = ballPos;
 
 		$_balls = _b;
+	}
+
+	function getPossibleMoves(ballIndex: number) {
+		return [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT].map((dir) =>
+			calculateNextPosition(ballIndex, dir)
+		);
 	}
 
 	setContext('sokoban', {
@@ -79,6 +92,7 @@
 		width,
 		height,
 		moveBall,
+		getPossibleMoves,
 		getPosition(index: number) {
 			return [index % width, Math.floor(index / width)];
 		},
@@ -117,8 +131,6 @@
 		}
 	}
 
-	const cellSize = 80;
-
 	const items = [
 		{
 			value: 'undo',
@@ -145,7 +157,7 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 
-<RadialMenu target={checkTarget} context {items} on:select={handleSelect} rotation={-90} />
+<RadialMenu target={checkTarget} {items} on:select={handleSelect} rotation={-90} />
 
 <div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
 	{#each $_balls as pos, i}
@@ -160,6 +172,7 @@
 		{/each}
 	</div>
 </div>
+Steps: {$historyIndex}
 
 <style>
 	.grid-wrapper {

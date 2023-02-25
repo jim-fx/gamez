@@ -280,7 +280,7 @@
 					<stop offset="10%" stop-color="#16161E" />
 					<stop offset="95%" stop-color="#252530" />
 				</radialGradient>
-				<filter id="n" x="0" y="0">
+				<filter id="noise" x="0" y="0">
 					<feTurbulence
 						type="fractalNoise"
 						baseFrequency="0.7"
@@ -295,7 +295,7 @@
 						<path d={item.path} fill="#252530" clip-path="url(#segment-{menuId}-{i})" />
 						<path
 							d={item.path}
-							filter="url(#n)"
+							filter="url(#noise)"
 							clip-path="url(#segment-{menuId}-{i})"
 							opacity="0.1"
 						/>

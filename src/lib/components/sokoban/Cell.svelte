@@ -64,29 +64,37 @@
 	}
 
 	.visible {
+		background-color: var(--light);
 		border: solid 0.5px white;
-		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2),
-			inset 2px 2px 9px rgba(255, 255, 255, 0.05), inset -2px -2px 9px rgba(0, 0, 0, 0.2);
+		/* box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2), */
+		/* 	inset 2px 2px 9px rgba(255, 255, 255, 0.05), inset -2px -2px 9px rgba(0, 0, 0, 0.2); */
+	}
+
+	.visible::before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background: url(#noise);
 	}
 
 	.target::after {
 		content: '';
 		box-sizing: border-box;
 		position: absolute;
-		width: 50%;
-		height: 50%;
-		top: 25%;
-		left: 25%;
-		border-radius: 100%;
-		opacity: 0.5;
-		border: solid 3px var(--target-color);
-		transform: scale(1);
-		transition: transform 0.5s, opacity 0.5s;
+		width: 100%;
+		height: 100%;
+		opacity: 0.3;
+		background: var(--target-color);
+		transition: transform 0.5s, opacity 0.5s, border-radius 0.3s;
 		transition-delay: 0.5s;
+		border-radius: 2px;
+		transform: scale(1);
 	}
 
 	.hasBall::after {
-		transform: scale(1.5);
-		opacity: 1;
+		opacity: 0.5;
+		transform: scale(0.7);
+		border-radius: 50%;
 	}
 </style>

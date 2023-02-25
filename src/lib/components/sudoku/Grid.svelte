@@ -49,7 +49,7 @@
 	setContext('grid', context);
 
 	const items = [
-		{ value: null, icon: 'x', center: true },
+		// { value: null, icon: 'x', center: true },
 		...Array(9)
 			.fill(null)
 			.map((_, i) => {

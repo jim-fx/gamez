@@ -45,13 +45,15 @@
 	});
 </script>
 
-<!-- <RadialMenu target={body} {items} on:select={handleSelect} /> -->
+<RadialMenu target={body} {items} on:select={handleSelect} />
 <svelte:body bind:this={body} />
 
 <slot />
 
 <style global>
 	:global(body[data-theme='dark']) {
+		--dark: #16161e;
+		--light: #252530;
 		--gradient: linear-gradient(-20deg, #16161e 0%, #252530 96.92%);
 		--outline-strong: #81818188;
 		--outline: #81818122;
@@ -63,6 +65,9 @@
 	}
 
 	:global(body) {
+		--dark: #16161e;
+		--light: #252530;
+		--gradient: linear-gradient(-20deg, #16161e 0%, #252530 96.92%);
 		--gradient: linear-gradient(-20deg, #16161e 0%, #252530 96.92%);
 		--outline-strong: #81818188;
 		--outline: #81818122;
