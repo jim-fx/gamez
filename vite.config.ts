@@ -7,11 +7,13 @@ import { defineConfig } from 'vite';
 
 
 export default defineConfig({
+  // This is for histoire
+  // publicDir: "static",
   plugins: [
     UnoCSS({
-      presets: [presetIcons(),presetUno()],
+      presets: [presetIcons(), presetUno()],
       extractors: [extractorSvelte],
     }),
-    sveltekit()
+    sveltekit(),
   ]
 });
