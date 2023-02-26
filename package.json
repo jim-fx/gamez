@@ -12,7 +12,9 @@
     "format": "prettier --plugin-search-dir . --write .",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
-    "story:preview": "histoire preview"
+    "story:preview": "histoire preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@histoire/plugin-svelte": "^0.15.8",
@@ -38,6 +40,7 @@
     "unocss": "^0.50.1",
     "vite": "^4.1.4",
     "vite-plugin-windicss": "^1.8.10",
+    "vitest": "^0.29.1",
     "windicss": "^3.5.6"
   },
   "type": "module",
@@ -45,6 +48,7 @@
     "@fontsource/nunito": "^4.5.12",
     "@sveltejs/adapter-static": "^2.0.1",
     "@unocss/preset-uno": "^0.50.1",
+    "lz-string": "^1.4.4",
     "nanoid": "^4.0.1",
     "sudoku-gen": "^1.0.0"
   }

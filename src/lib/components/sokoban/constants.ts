@@ -1,3 +1,5 @@
+import type { BoardState } from "./core";
+
 export const colors = [
   "#FF8F50",
   "#FF4FE3",
@@ -14,38 +16,29 @@ export enum Direction {
   RIGHT
 }
 
-export const defaultGame = {
+export const defaultGame: BoardState = {
   balls: [
-    6, 5
+    {
+      start: 5,
+      target: 11,
+    },
+    {
+      start: 6,
+      target: 10,
+    }
   ],
-  targets: [
-    10, 11,
-  ],
-  grid: [
-    false,
-    true,
-    false,
-    true,
-    false,
-    true,
-    true,
-    true,
-    true,
-    false,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    false,
-    true,
-    false,
-    true,
-    false
+  width: 5,
+  height: 5,
+  steps: {
+    best: 6,
+    worst: 10,
+  },
+  difficulty: 0,
+  cells: [
+    0, 1, 0, 1, 0,
+    1, 1, 1, 1, 0,
+    1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1,
+    0, 1, 0, 1, 0
   ]
 } 

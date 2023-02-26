@@ -49,7 +49,7 @@
 		padding: 10px;
 		border-radius: 10px;
 		border: solid 2px var(--neutral100);
-		background: var(--neutral400);
+		background: var(--neutral800);
 		overflow: visible;
 	}
 

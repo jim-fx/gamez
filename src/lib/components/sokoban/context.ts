@@ -3,7 +3,7 @@ import type { Writable } from "svelte/store";
 
 export type Context = {
   balls: Writable<number[]>,
-  grid: boolean[],
+  cells: number[],
   width: number,
   height: number,
   getPosition: (index: number) => [number, number],

@@ -2,7 +2,7 @@
 	import { getContext } from './context';
 	import { colors } from './constants';
 
-	export let value: boolean;
+	export let visible: boolean;
 	export let index: number;
 	export let target: number = -1;
 
@@ -10,7 +10,7 @@
 
 	const balls = ctx.balls;
 
-	$: hasBall = target >= 0 && $balls[target] === index;
+	$: hasBall = $balls && target >= 0 && $balls[target] === index;
 
 	const [cellX, cellY] = ctx.getPosition(index);
 
@@ -26,7 +26,7 @@
 	const borderSmall = 'var(--outline)';
 </script>
 
-{#if value}
+{#if visible}
 	<div
 		class="cell visible"
 		class:hasBall

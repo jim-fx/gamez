@@ -4,6 +4,7 @@
 </script>
 
 <div>
+	{won}
 	<Sokoban bind:won />
 </div>
 
