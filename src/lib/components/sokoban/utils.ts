@@ -1,4 +1,4 @@
-import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
+import lz from "lz-string";
 import type { BoardState } from "./core";
 
 export function compare<T>(a: T[], b: T[]) {
@@ -128,9 +128,9 @@ export function trimBoardState(b: BoardState): BoardState {
 
 const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 export function compressArray(arr: number[]) {
-  return compressToEncodedURIComponent(arr.map((n) => chars[n]).join(""));
+  return lz.compressToEncodedURIComponent(arr.map((n) => chars[n]).join(""));
 }
 
 export function decompressArray(str: string) {
-  return decompressFromEncodedURIComponent(str).split("").map((c: string) => chars.indexOf(c));
+  return lz.decompressFromEncodedURIComponent(str).split("").map((c: string) => chars.indexOf(c));
 }
