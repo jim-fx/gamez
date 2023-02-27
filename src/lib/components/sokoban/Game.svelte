@@ -18,20 +18,17 @@
 	let wrapper: HTMLElement;
 
 	let balls = historyStore(state.balls.map((b) => b.start));
-	export let steps = balls.activeIndex;
-
-	let oldState = state;
-	$: if (JSON.stringify(oldState) !== JSON.stringify(state)) {
-		balls = historyStore(state.balls.map((b) => b.start));
+	export let steps = 0;
+	$: _steps = balls.activeIndex;
+	$: if ($_steps) {
+		steps = $_steps;
 	}
-
-	$: steps = balls.activeIndex;
 	$: targets = state.balls.map((b) => b.target);
 	$: won = compare($balls, targets);
 	$: rating =
 		5 -
 		Math.min(
-			Math.floor((($steps - state.steps.best) / (state.steps.worst - state.steps.best)) * 4),
+			Math.floor((($_steps - state.steps.best) / (state.steps.worst - state.steps.best)) * 4),
 			4
 		);
 
@@ -159,7 +156,12 @@
 <div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
 	<Grid width={state.width} height={state.height} cells={state.cells} balls={$balls} {targets} />
 	{#if showRating}
-		{$steps}
 		<Stars {rating} />
 	{/if}
 </div>
+
+<style>
+	.gamer-wrapper {
+		z-index: 0;
+	}
+</style>

@@ -16,7 +16,11 @@
 {/each}
 <div
 	class="grid-wrapper"
-	style={`grid-template-columns: repeat(${width}, 1fr); grid-template-rows: repeat(${height}, 1fr);`}
+	style={`
+    grid-template-columns: repeat(${width}, 1fr); 
+    grid-template-rows: repeat(${height}, 1fr);
+    --cell-gradient: linear-gradient(120deg, var(--neutral800), var(--neutral850));
+`}
 >
 	{#each cells as cell, i}
 		<Cell visible={cell === 1} index={i} target={_targets.get(i)} />

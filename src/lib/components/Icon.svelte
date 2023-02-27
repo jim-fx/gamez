@@ -1,14 +1,28 @@
 <script lang="ts">
-	export let name: 'arrow-right' | 'arrow-left' | 'settings' | 'x' | 'edit' | 'player-play';
+	export let name:
+		| 'circle-arrow-right'
+		| 'circle-arrow-left'
+		| 'arrow-right'
+		| 'arrow-left'
+		| 'settings'
+		| 'x'
+		| 'edit'
+		| 'player-play'
+		| 'lock'
+		| 'menu-2';
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 
-	$: width = size === 'small' ? 15 : size === 'medium' ? 25 : 60;
+	$: width = size === 'small' ? 18 : size === 'medium' ? 25 : 60;
 </script>
 
-{#if name === 'arrow-right'}
+{#if name === 'circle-arrow-right'}
 	<div class="i-tabler-circle-arrow-right" style="width: {width}px; height: {width}px" />
-{:else if name === 'arrow-left'}
+{:else if name === 'circle-arrow-left'}
 	<div class="i-tabler-circle-arrow-left" style="width: {width}px; height: {width}px" />
+{:else if name === 'arrow-left'}
+	<div class="i-tabler-arrow-left" style="width: {width}px; height: {width}px" />
+{:else if name === 'arrow-right'}
+	<div class="i-tabler-arrow-right" style="width: {width}px; height: {width}px" />
 {:else if name === 'settings'}
 	<div class="i-tabler-settings" style="width: {width}px; height: {width}px" />
 {:else if name === 'x'}
@@ -17,6 +31,10 @@
 	<div class="i-tabler-edit" style="width: {width}px; height: {width}px" />
 {:else if name === 'player-play'}
 	<div class="i-tabler-player-play" style="width: {width}px; height: {width}px" />
+{:else if name === 'menu-2'}
+	<div class="i-tabler-menu-2" style="width: {width}px; height: {width}px" />
+{:else if name === 'lock'}
+	<div class="i-tabler-lock" style="width: {width}px; height: {width}px" />
 {/if}
 
 <style>

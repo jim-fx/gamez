@@ -2,6 +2,7 @@
 	export let amount = 5;
 	export let rating = 0;
 	export let interactive: boolean | null = null;
+	export let size: 'small' | 'medium' | 'large' = 'medium';
 	import star from './star.png';
 
 	function handleClick(index: number) {
@@ -17,12 +18,19 @@
 	}
 </script>
 
-<div class="wrapper" class:interactive>
+<div
+	class="wrapper"
+	class:interactive
+	style={`
+        --star-url: url(${star}); 
+        --star-size: ${size === 'small' ? 10 : size === 'medium' ? 20 : 30}px;
+        --padding: ${size === 'small' ? 7 : size === 'medium' ? 10 : 20}px;
+`}
+>
 	{#each new Array(amount) as _, i}
 		<div
 			class="star"
 			class:enabled={i < rating}
-			style={`--star-url: url(${star})`}
 			on:click={() => handleClick(i)}
 			on:keypress={(e) => handleKeyPress(e, i)}
 		>
@@ -45,15 +53,16 @@
 	.wrapper {
 		display: flex;
 		width: fit-content;
-		gap: 10px;
-		padding: 10px;
+		gap: var(--padding);
+		padding: var(--padding);
 		border-radius: 10px;
-		border: solid 2px var(--neutral100);
+		border: solid 1px var(--outline);
 		background: var(--neutral800);
 		overflow: visible;
 	}
 
 	svg {
+		position: absolute;
 		height: 100%;
 		width: 100%;
 		overflow: visible;
@@ -79,8 +88,8 @@
 
 	.star {
 		position: relative;
-		width: 30px;
-		height: 30px;
+		width: var(--star-size);
+		height: var(--star-size);
 		will-change: transform;
 	}
 

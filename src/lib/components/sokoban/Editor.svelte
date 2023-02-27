@@ -6,7 +6,7 @@
 	import { colors } from './constants';
 	import type { BoardState } from './core';
 	import Game from './Game.svelte';
-	import { arrayToMap } from './utils';
+	import { arrayToMap, trimBoardState } from './utils';
 
 	export let state: BoardState;
 
@@ -14,7 +14,7 @@
 
 	$: amount = state.width * state.height;
 	let ballAmount = localStore('sokoban-editor-ball-amount', 1);
-	let gameSteps = writable(0);
+	let gameSteps = 0;
 
 	$: if ($ballAmount > 0) {
 		state.balls = state.balls.slice(0, $ballAmount);
@@ -30,11 +30,28 @@
 
 	$: balls = arrayToMap(state.balls.map((b) => b.start).filter((v) => typeof v === 'number'));
 	$: targets = arrayToMap(state.balls.map((b) => b.target).filter((v) => typeof v === 'number'));
-	$: console.log({ balls, targets });
 
 	let _width = state.width;
 	let _height = state.height;
 	$: if (state.width * state.height !== state.cells.length) {
+		state.balls = state.balls.map((b) => {
+			const bx = b.start % _width;
+			const by = Math.floor(b.start / _height);
+			const tx = b.target % _width;
+			const ty = Math.floor(b.target / _height);
+			if (bx > state.width || by > state.height) {
+				b.start = null;
+			} else {
+				b.start = by * state.width + bx;
+			}
+			if (tx > state.width || ty > state.height) {
+				b.target = null;
+			} else {
+				b.target = ty * state.width + tx;
+			}
+			return b;
+		});
+
 		const cells = new Array(state.width * state.height).fill(0).map((_, i) => {
 			const nx = i % state.width;
 			const ny = Math.floor(i / state.width);
@@ -142,46 +159,48 @@
 
 <div class="wrapper" class:view-map={$activeView === 'map'} style="">
 	<div>
-		{#if $activeView !== 'game'}
-			<div class="grid" style={`--width: ${state.width}; --height: ${state.height}`}>
-				{#each Array.from({ length: amount }) as _, index}
-					<div
-						class="cell"
-						class:active={state.cells[index] === 1}
-						style={`--color: ${getColorForCell(index, balls, targets)}`}
-						on:dragover={handleDragOver}
-						on:drop={() => handleDrop(index)}
-						on:keydown={() => {}}
-						on:click={() => $activeView === 'map' && toggleActiveCell(index)}
-					>
-						{#if balls.has(index)}
-							<div
-								class="ball"
-								draggable="true"
-								on:dragstart={() => setDragTarget('ball', balls.get(index))}
-							/>
-						{/if}
-						{#if targets.has(index)}
-							<div
-								class="target"
-								draggable="true"
-								on:dragstart={() => setDragTarget('target', targets.get(index))}
-							/>
-						{/if}
-					</div>
-				{/each}
-			</div>
-		{:else}
+		<div class="grid" style={`--width: ${state.width}; --height: ${state.height}`}>
+			{#each Array.from({ length: amount }) as _, index}
+				<div
+					class="cell"
+					class:active={state.cells[index] === 1}
+					style={`--color: ${getColorForCell(index, balls, targets)}`}
+					on:dragover={handleDragOver}
+					on:drop={() => handleDrop(index)}
+					on:keydown={() => {}}
+					on:click={() => $activeView === 'map' && toggleActiveCell(index)}
+				>
+					{#if balls.has(index)}
+						<div
+							class="ball"
+							draggable="true"
+							on:dragstart={() => setDragTarget('ball', balls.get(index))}
+						/>
+					{/if}
+					{#if targets.has(index)}
+						<div
+							class="target"
+							draggable="true"
+							on:dragstart={() => setDragTarget('target', targets.get(index))}
+						/>
+					{/if}
+				</div>
+			{/each}
+		</div>
+		{#if $activeView === 'game'}
 			<Game {state} bind:steps={gameSteps} />
 		{/if}
 		<div class="controls">
 			<div class="controls-header">
-				<Tab bind:value={$activeView}>
-					<Tab.Content value="map"><Icon name="edit" /></Tab.Content>
-					<Tab.Content value="game"><Icon name="player-play" /></Tab.Content>
+				<Tab bind:value={$activeView} showActiveState contentStyle={'padding: 0.7em'}>
+					<Tab.Content value="map"><Icon size="small" name="edit" /></Tab.Content>
+					<Tab.Content value="game"><Icon size="small" name="player-play" /></Tab.Content>
 				</Tab>
 				{#if $activeView === 'game'}
-					{$gameSteps}
+					{gameSteps}
+				{/if}
+				{#if $activeView === 'map'}
+					<button on:click={() => (state = trimBoardState(state))}>trim</button>
 				{/if}
 			</div>
 			<br />
@@ -261,18 +280,24 @@
 	.wrapper {
 		display: grid;
 		justify-content: center;
-		padding-top: 20vh;
-		height: 100%;
+		width: fit-content;
 	}
 	.grid {
 		grid-template-columns: repeat(var(--width), 1fr);
 		grid-template-rows: repeat(var(--height), 1fr);
 		width: min-content;
 		height: min-content;
+		position: absolute;
+		opacity: 0;
+		transition: opacity 0.2s;
+		pointer-events: none;
 	}
 
-	.view-balls .cell {
-		border-color: transparent;
+	.view-map .grid {
+		position: relative;
+		opacity: 1;
+		transition: opacity 0s;
+		pointer-events: auto;
 	}
 
 	.controls-header {

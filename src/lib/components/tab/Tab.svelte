@@ -6,17 +6,24 @@
 
 	export let value: string | null = null;
 
-	const activeTab: Writable<number> = writable(0);
+	export let style = '';
+	export let contentStyle = '';
+
+	export let showActiveState = false;
+
+	const activeTab: Writable<number> = writable(-1);
 
 	createContext({
 		activeTab,
+		contentStyle,
 		setActiveTab: (index: number) => {
+			if (!showActiveState) return;
 			activeTab.set(index);
 			value = tabs[index].value;
 		},
 		registerTab: (tabValue?: string) => {
 			if (tabValue) {
-				if (value === tabValue) {
+				if (value === tabValue && showActiveState) {
 					activeTab.set(tabs.length);
 				}
 
@@ -38,17 +45,18 @@
 	});
 </script>
 
-<div class="wrapper"><slot /></div>
+<div class="wrapper" {style}><slot /></div>
 
 <style>
 	.wrapper {
+		position: relative;
 		width: fit-content;
 		display: flex;
 		color: var(--neutral100);
-		background-color: var(--neutral800);
-		border: 1px solid var(--neutral100);
+		border: 1px solid var(--outline);
 		border-radius: 0.5em;
 		overflow: hidden;
+		background: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 	}
 
 	:global(.wrapper > .wrapper:last-child) {

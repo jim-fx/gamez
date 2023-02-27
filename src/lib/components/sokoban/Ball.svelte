@@ -16,8 +16,8 @@
 
 	$: isAtTarget = position === target;
 
-	$: x = (cellSize - 1.3) * cellX;
-	$: y = (cellSize - 1.3) * cellY;
+	$: x = cellSize * cellX - (cellX + 1);
+	$: y = cellSize * cellY - (cellY + 1);
 
 	let mouseDown: number[] | null = null;
 	let mouse: number[] = [];
@@ -71,7 +71,15 @@
 	on:mousedown={handleMouseDown}
 	class:hovered={mouseDown}
 >
-	<div class="ball" class:isAtTarget style={`background-color: var(--${colors[index]}50);`} />
+	<div
+		class="ball"
+		class:isAtTarget
+		style={`
+    --color: var(--${colors[index]}50);
+    --color-light: var(--${colors[index]}0);
+    --color-dark: var(--${colors[index]}300);
+`}
+	/>
 </div>
 
 <svelte:window
@@ -92,25 +100,28 @@
 		z-index: 5;
 	}
 
-	.hovered .ball {
-		transform: scale(1.2);
-		box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
-	}
-
 	.ball {
 		z-index: 1;
 		cursor: pointer;
 		opacity: 0.8;
 		border-radius: 100%;
-		transition: transform 0.5s;
+		transition: transform 0.5s, box-shadow 0.3s ease;
 		width: calc(var(--cell-size) * 0.5);
 		transform-origin: center;
 		height: calc(var(--cell-size) * 0.5);
 		user-select: none;
+		background-color: var(--color);
+		box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25), inset -4px -4px 8px var(--color-dark),
+			inset 4px 4px 4px var(--color-light);
+	}
+	.hovered .ball {
+		transform: scale(1.2);
+		box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25), inset -4px -5px 8px var(--color-dark),
+			inset 6px 6px 6px var(--color-light);
 	}
 
 	.isAtTarget {
-		transform: scale(0.8);
+		transform: scale(0.9);
 		opacity: 1;
 	}
 </style>

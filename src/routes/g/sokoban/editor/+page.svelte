@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { Editor, encodeSokobanBoard } from '$lib/components/sokoban';
-	import { compressArray } from '$lib/components/sokoban/utils';
+	import { decodeSokobanBoard, Editor, encodeSokobanBoard } from '$lib/components/sokoban';
+	import type { BoardState } from '$lib/components/sokoban/core';
 	import localStore from '$lib/localStore';
 
-	const state = localStore('sokoban-editor-state', {
+	const state = localStore<BoardState>('sokoban-editor-state', {
 		width: 5,
 		height: 5,
 		cells: [],
-		targets: [],
 		balls: [],
 		steps: {
 			best: 0,
@@ -15,8 +14,49 @@
 		},
 		difficulty: 0
 	});
-	$: save = encodeSokobanBoard($state);
+	let encoded = encodeSokobanBoard($state);
+	let oldEncoded = encoded;
+
+	$: if ($state) {
+		const newEncoded = encodeSokobanBoard($state);
+		if (newEncoded !== oldEncoded) {
+			encoded = newEncoded;
+			oldEncoded = newEncoded;
+		}
+	}
+
+	$: if (encoded) {
+		try {
+			if (encoded !== oldEncoded) {
+				const decoded = decodeSokobanBoard(encoded);
+				state.set(decoded);
+				oldEncoded = encoded;
+			}
+		} catch {
+			console.log('Invalid board');
+			encoded = oldEncoded;
+		}
+	}
 </script>
 
-<p>{save}</p>
+<input bind:value={encoded} />
 <Editor bind:state={$state} />
+
+<style>
+	:global(body) {
+		display: grid;
+		place-items: center;
+	}
+	input {
+		width: fit-content;
+		max-width: 50%;
+		position: fixed;
+		top: 10px;
+		left: 10px;
+		border-radius: 5px;
+		padding: 5px;
+		background: var(--neutral800);
+		border: 1px solid var(--outline);
+		color: var(--text);
+	}
+</style>

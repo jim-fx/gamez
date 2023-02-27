@@ -25,9 +25,6 @@
         ${hasCellAbove || hasCellRight ? none : borderR} 
         ${hasCellRight || hasCellBelow ? none : borderR} 
         ${hasCellBelow || hasCellLeft ? none : borderR};`;
-
-	const borderLarge = 'var(--outline-strong)';
-	const borderSmall = 'var(--outline)';
 </script>
 
 {#if visible}
@@ -40,11 +37,7 @@
       border-radius:  ${borderRadius}
       --border-radius: ${borderRadius};
 
-      border-color: 
-        ${hasCellAbove ? borderSmall : borderLarge} 
-        ${hasCellRight ? borderSmall : borderLarge} 
-        ${hasCellBelow ? borderSmall : borderLarge} 
-        ${hasCellLeft ? borderSmall : borderLarge};
+      border-color: var(--outline);
     `}
 	/>
 {:else}
@@ -68,7 +61,10 @@
 	.visible {
 		border-width: 1px;
 		border-style: solid;
-		background-color: var(--light);
+		background: var(--cell-gradient);
+		background-attachment: fixed;
+		background-size: 100% 100%;
+		background-position: center;
 		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25);
 	}
 
@@ -77,7 +73,12 @@
 		position: absolute;
 		height: 100%;
 		width: 100%;
-		background: url(#noise);
+		z-index: 99;
+		background: url(/noise.png);
+		background-size: 100px;
+		opacity: 0.3;
+		border-radius: var(--border-radius);
+		background-attachment: fixed;
 	}
 
 	.target::after {
