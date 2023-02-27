@@ -1,5 +1,5 @@
 <script lang="ts">
-	import historyStore from '$lib/components/historyStore';
+	import historyStore from '$lib/historyStore';
 	import { writable } from 'svelte/store';
 
 	const store = historyStore('Test');
