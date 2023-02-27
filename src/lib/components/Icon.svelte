@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let name: 'arrow-right' | 'arrow-left';
+	export let name: 'arrow-right' | 'arrow-left' | 'settings' | 'x' | 'edit' | 'player-play';
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 
 	$: width = size === 'small' ? 15 : size === 'medium' ? 25 : 60;
@@ -13,6 +13,10 @@
 	<div class="i-tabler-settings" style="width: {width}px; height: {width}px" />
 {:else if name === 'x'}
 	<div class="i-tabler-circle-x" style="width: {width}px; height: {width}px" />
+{:else if name === 'edit'}
+	<div class="i-tabler-edit" style="width: {width}px; height: {width}px" />
+{:else if name === 'player-play'}
+	<div class="i-tabler-player-play" style="width: {width}px; height: {width}px" />
 {/if}
 
 <style>

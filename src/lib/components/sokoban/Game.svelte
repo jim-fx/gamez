@@ -7,16 +7,33 @@
 	import historyStore from '$lib/historyStore';
 	import RadialMenu from '../RadialMenu.svelte';
 	import { compare } from './utils';
+	import Stars from '../star/Stars.svelte';
 
 	export let state: BoardState = defaultGame;
-	$: ({ width, height } = state);
 	export let won = false;
+	export let showRating = false;
+
+	$: ({ width, height } = state);
 
 	let wrapper: HTMLElement;
 
-	const balls = historyStore(state.balls.map((b) => b.start));
+	let balls = historyStore(state.balls.map((b) => b.start));
+	export let steps = balls.activeIndex;
+
+	let oldState = state;
+	$: if (JSON.stringify(oldState) !== JSON.stringify(state)) {
+		balls = historyStore(state.balls.map((b) => b.start));
+	}
+
+	$: steps = balls.activeIndex;
 	$: targets = state.balls.map((b) => b.target);
 	$: won = compare($balls, targets);
+	$: rating =
+		5 -
+		Math.min(
+			Math.floor((($steps - state.steps.best) / (state.steps.worst - state.steps.best)) * 4),
+			4
+		);
 
 	function calculateNextPosition(ballIndex: number, dir: Direction) {
 		let ballPos = $balls[ballIndex];
@@ -141,4 +158,8 @@
 <RadialMenu target={checkTarget} {items} on:select={handleSelect} rotation={-90} />
 <div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
 	<Grid width={state.width} height={state.height} cells={state.cells} balls={$balls} {targets} />
+	{#if showRating}
+		{$steps}
+		<Stars {rating} />
+	{/if}
 </div>

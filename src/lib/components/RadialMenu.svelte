@@ -101,7 +101,6 @@
 
 	async function handleMouseDown(e: MouseEvent) {
 		if ((context === true && e.button !== 2) || (context !== true && e.button === 2)) return;
-		console.log('handleMouseDown', e);
 		if (!checkIfValidTarget(e.target as HTMLElement)) return;
 		visible = true;
 		mouseDown = [e.clientX, e.clientY];
@@ -110,7 +109,6 @@
 		e.stopPropagation();
 	}
 	function handleMouseUp(e: MouseEvent) {
-		console.log('handleMouseUp');
 		visible = false;
 		if (length < innerRadius && centerItem) {
 			dispatch('select', centerItem.value);

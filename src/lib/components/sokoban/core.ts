@@ -1,3 +1,5 @@
+import { compressArray, decompressArray } from "./utils";
+
 export type Ball = {
   start: number,
   target: number
@@ -119,11 +121,14 @@ function decodeCells(ballAmount: number, input: number[]): [Ball[], number[]] {
 
 }
 
-export function encodeSokobanBoard(input: BoardState): number[] {
-  return [input.balls.length, input.steps.best, input.steps.worst, input.difficulty, input.width, input.height, ...compressCells(encodeCells(input))];
+export function encodeSokobanBoard(input: BoardState): string {
+  const level = [input.balls.length, input.steps.best, input.steps.worst, input.difficulty, input.width, input.height, ...compressCells(encodeCells(input))];
+  return compressArray(level);
 }
 
-export function decodeSokobanBoard(input: number[]): BoardState {
+export function decodeSokobanBoard(levelString: string): BoardState {
+
+  const input = decompressArray(levelString);
 
   const [ballAmount, bestSteps, worstSteps, difficulty, width, height, ...rest] = input;
 

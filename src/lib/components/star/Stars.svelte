@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let amount = 5;
 	export let rating = 0;
-	export let interactive: boolean | null;
+	export let interactive: boolean | null = null;
 	import star from './star.png';
 
 	function handleClick(index: number) {
@@ -108,10 +108,6 @@
 
 	.star.enabled svg {
 		opacity: 0;
-	}
-
-	.star.enabled g {
-		filter: url(#filter0_dii_40_319);
 	}
 
 	.star path {

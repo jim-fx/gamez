@@ -1,13 +1,14 @@
 import type { BoardState } from "./core";
 
 export const colors = [
-  "#FF8F50",
-  "#FF4FE3",
-  "#534FFF",
-  "#4FFFB5",
+  "red",
+  "lime",
+  "yellow",
+  "indigo",
+  "pink"
 ]
 
-export const cellSize = 80;
+export const cellSize = 60;
 
 export enum Direction {
   UP,

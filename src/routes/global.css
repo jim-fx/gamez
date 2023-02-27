@@ -90,7 +90,7 @@
   --orange300: rgb(176, 33, 13);
   --orange400: rgb(160, 11, 1);
   --orange500: rgb(144, 0, 0);
- --orange600: rgb(129, 0, 0);
+  --orange600: rgb(129, 0, 0);
   --orange700: rgb(114, 0, 0);
   --orange800: rgb(100, 0, 0);
   --orange900: rgb(87, 0, 0);
@@ -168,11 +168,11 @@ body[data-theme='dark'] {
 
 body {
 		--dark: #16161e;
-		--light: #252530;
+		--light: var(--neutral800);
     --ease: cubic-bezier(.82,0,.18,1);
 		--gradient: linear-gradient(-20deg, var(--neutral900) 0%, var(--neutral800) 96.92%);
-		--outline-strong: #81818188;
-		--outline: #81818122;
+		--outline-strong: var(--neutral100);
+		--outline: var(--neutral500);
 		--text-light: #7c8092;
 		--text: #7c8092;
 		--text-strong: #b2b8d2;
@@ -181,7 +181,7 @@ body {
 	}
 
 	body {
-		background: var(--gradient);
+		background: var(--neutral900);
 		background-size: contain;
 		height: 100%;
 		margin: 0;

@@ -16,8 +16,8 @@
 
 	$: isAtTarget = position === target;
 
-	$: x = cellSize * cellX;
-	$: y = cellSize * cellY;
+	$: x = (cellSize - 1.3) * cellX;
+	$: y = (cellSize - 1.3) * cellY;
 
 	let mouseDown: number[] | null = null;
 	let mouse: number[] = [];
@@ -71,7 +71,7 @@
 	on:mousedown={handleMouseDown}
 	class:hovered={mouseDown}
 >
-	<div class="ball" class:isAtTarget style={`background-color: ${colors[index]};`} />
+	<div class="ball" class:isAtTarget style={`background-color: var(--${colors[index]}50);`} />
 </div>
 
 <svelte:window
