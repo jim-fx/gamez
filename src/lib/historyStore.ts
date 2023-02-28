@@ -89,6 +89,16 @@ export default function historyStore<T>(initialValue: T | Writable<T>) {
     undo,
     redo,
     activeIndex,
+    get previousValue() {
+      const index = get(activeIndex);
+      if (index === 0) return null;
+      return history[index - 1] || null;
+    },
+    get nextValue() {
+      const index = get(activeIndex);
+      if (index === history.length - 1) return null;
+      return history[index + 1] || null;
+    },
     get history() {
       return [...history]
     }

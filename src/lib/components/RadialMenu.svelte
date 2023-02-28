@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { isFirefox } from '$lib/detect';
 	import { nanoid } from 'nanoid';
 	import { rotateVec2, addVec, radiansToDegrees, vecLength } from '$lib/math';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
+	import { writable } from 'svelte/store';
 
 	type Option = {
 		value: unknown;
@@ -79,7 +79,11 @@
 	}
 
 	$: index = length < innerRadius || !visible || !__items.length ? -1 : calculateIndex(angle);
-
+	export const selected = writable<Option | null>(null);
+	$: if (index !== undefined) {
+		const selectedItem = items[index] || null;
+		selected.set(selectedItem);
+	}
 	$: center = [
 		Math.min(
 			Math.max(mouseDown[0] - outerRadius - padding / 2, 0),

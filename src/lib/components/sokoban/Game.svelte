@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type { BoardState } from './core';
 	import Grid from './Grid.svelte';
-	import { defaultGame, Direction } from './constants';
+	import { colors, defaultGame, Direction } from './constants';
 	import { cellSize } from './constants';
 	import { getContext, setContext } from './context';
 	import historyStore from '$lib/historyStore';
 	import RadialMenu from '../RadialMenu.svelte';
 	import { compare } from './utils';
 	import Stars from '../star/Stars.svelte';
+	import { writable, type Writable } from 'svelte/store';
 
 	export let state: BoardState = defaultGame;
 	export let won = false;
@@ -136,6 +137,32 @@
 			content: 'Redo'
 		}
 	];
+	let selectedItem: Writable<(typeof items)[number] | null> = writable(null);
+	function getArrowProps() {
+		if (!$selectedItem) return null;
+
+		const direction = $selectedItem.value;
+
+		const currentState = $balls;
+		let nextState = direction === 'undo' ? balls.previousValue : balls.nextValue;
+		if (!nextState) return null;
+
+		for (let i = 0; i < currentState.length; i++) {
+			if (currentState[i] !== nextState[i]) {
+				return {
+					end: nextState[i],
+					start: currentState[i],
+					color: colors[i]
+				};
+			}
+		}
+
+		return null;
+	}
+	$: arrow = $selectedItem ? getArrowProps() : null;
+	$: if ($selectedItem) {
+		// arrow = getArrowProps();
+	}
 
 	function handleSelect(e: CustomEvent) {
 		if (e.detail === 'undo') {
@@ -152,9 +179,22 @@
 
 <svelte:window on:keydown={handleKeyDown} />
 
-<RadialMenu target={checkTarget} {items} on:select={handleSelect} rotation={-90} />
+<RadialMenu
+	target={checkTarget}
+	{items}
+	bind:selected={selectedItem}
+	on:select={handleSelect}
+	rotation={-90}
+/>
 <div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
-	<Grid width={state.width} height={state.height} cells={state.cells} balls={$balls} {targets} />
+	<Grid
+		width={state.width}
+		height={state.height}
+		cells={state.cells}
+		balls={$balls}
+		{targets}
+		{arrow}
+	/>
 	{#if showRating}
 		<Stars {rating} />
 	{/if}

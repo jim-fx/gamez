@@ -2,11 +2,14 @@
 	import Cell from './Cell.svelte';
 	import BallComponent from './Ball.svelte';
 	import { arrayToMap } from './utils';
+	import Arrow from './Arrow.svelte';
 	export let width: number = 5;
 	export let height: number = 5;
 	export let cells: number[];
 	export let balls: number[];
 	export let targets: number[];
+
+	export let arrow: { start: number; end: number; color: string } | null = null;
 
 	const _targets = arrayToMap(targets);
 </script>
@@ -22,6 +25,7 @@
     --cell-gradient: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 `}
 >
+	<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
 	{#each cells as cell, i}
 		<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
 	{/each}
@@ -29,6 +33,7 @@
 
 <style>
 	.grid-wrapper {
+		position: relative;
 		display: grid;
 		grid-gap: 0;
 		width: fit-content;
