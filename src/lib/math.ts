@@ -21,3 +21,7 @@ export function addVec(a: number[], b: number[]) {
 export function vecLength(vec: number[]) {
   return Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
 }
+
+export function mod(a: number, n: number) {
+  return ((a % n) + n) % n
+}

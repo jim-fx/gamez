@@ -18,7 +18,9 @@
 
 	let wrapper: HTMLElement;
 
-	let balls = historyStore(state.balls.map((b) => b.start));
+	let balls = historyStore(
+		state.balls.filter((b) => b.start > -1 && b.target > -1).map((b) => b.start)
+	);
 	export let steps = 0;
 	$: _steps = balls.activeIndex;
 	$: if ($_steps) {

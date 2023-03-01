@@ -8,8 +8,9 @@
 	export let grid: (number | null)[] = [];
 
 	let initialGrid: (number | null)[] | null = null;
-	$: if (initialGrid === null) {
-		initialGrid = grid;
+	$: if (initialGrid === null && grid) {
+		console.log('initializing grid');
+		initialGrid = [...grid];
 	}
 
 	const activeIndex = writable(-1);
@@ -49,7 +50,7 @@
 	setContext('grid', context);
 
 	const items = [
-		// { value: null, icon: 'x', center: true },
+		{ value: null, icon: 'x' },
 		...Array(9)
 			.fill(null)
 			.map((_, i) => {
@@ -66,6 +67,7 @@
 
 	function handleSelect(e: CustomEvent) {
 		const value = e.detail;
+		console.log($activeIndex, value, initialGrid);
 		const i = $activeIndex;
 		if (i === -1) return;
 		if (initialGrid && typeof initialGrid[i] === 'number') return;
@@ -74,7 +76,7 @@
 	}
 </script>
 
-<RadialMenu target={checkTarget} {items} on:select={handleSelect} />
+<RadialMenu rotation={180} target={checkTarget} {items} on:select={handleSelect} />
 <svelte:window on:mouseup={() => context.activeIndex.set(-1)} />
 
 <div class="sudoku-wrapper">
@@ -85,6 +87,7 @@
 
 <style>
 	.sudoku-wrapper {
+		position: relative;
 		display: grid;
 		user-select: none;
 		grid-template-columns: repeat(9, 1fr);
@@ -96,8 +99,7 @@
 		border-radius: 20px;
 		overflow: hidden;
 
-		background-image: url('data:image/svg+xml;base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCI+CjxmaWx0ZXIgaWQ9Im4iIHg9IjAiIHk9IjAiPgo8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC43IiBudW1PY3RhdmVzPSIxMCIgc3RpdGNoVGlsZXM9InN0aXRjaCI+PC9mZVR1cmJ1bGVuY2U+CjwvZmlsdGVyPgo8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzAwMCI+PC9yZWN0Pgo8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIwLjEiPjwvcmVjdD4KPC9zdmc+'),
-			linear-gradient(-20deg, #16161e 3.85%, #252530 96.92%);
+		background-image: linear-gradient(-20deg, #16161e 3.85%, #252530 96.92%);
 		background-blend-mode: screen;
 
 		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2),
@@ -106,5 +108,15 @@
 		/* Outline */
 		outline: 1px solid var(--outline);
 		border: none;
+	}
+
+	.sudoku-wrapper::after {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: url(/noise.png);
+		pointer-events: none;
+		opacity: 0.2;
 	}
 </style>

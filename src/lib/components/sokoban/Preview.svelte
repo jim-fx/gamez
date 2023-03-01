@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { decodeSokobanBoard, type BoardState } from './core';
+	import { colors } from './constants';
+	import { decodeSokobanBoard } from './core';
+	import { arrayToMap } from './utils';
 
 	export let level: string;
 	$: state = decodeSokobanBoard(level);
@@ -10,6 +12,10 @@
 		}
 		return state.cells[y * state.width + x];
 	}
+
+	$: balls = arrayToMap(state.balls.map((b) => b.start));
+	$: targets = arrayToMap(state.balls.map((b) => b.target));
+	$: console.log(balls, targets);
 
 	const borderR = '5px';
 	const none = '0px';
@@ -27,6 +33,16 @@
         ${hasCellRight || hasCellBelow ? none : borderR} 
         ${hasCellBelow || hasCellLeft ? none : borderR};`;
 	}
+
+	function getColor(index: number) {
+		if (balls.has(index)) {
+			return `color: var(--${colors[balls.get(index)]}50);`;
+		}
+		if (targets.has(index)) {
+			return `color: var(--${colors[targets.get(index)]}50);`;
+		}
+		return '';
+	}
 </script>
 
 <div class="grid" style={`--width: ${state.width}; --height: ${state.height};`}>
@@ -34,7 +50,12 @@
 		<div
 			class="cell"
 			class:visible={cell === 1}
-			style={`--border-radius: ${calculateBorderRadius(i)}`}
+			class:ball={balls.has(i)}
+			class:target={targets.has(i)}
+			style={`
+        --border-radius: ${calculateBorderRadius(i)}; 
+        ${getColor(i)}
+`}
 		/>
 	{/each}
 </div>
@@ -48,7 +69,28 @@
 		width: fit-content;
 	}
 
+	.ball::after {
+		background: currentColor;
+	}
+
+	.target::after,
+	.ball::after {
+		content: '';
+		position: absolute;
+		width: 60%;
+		height: 60%;
+		top: 20%;
+		left: 20%;
+		border-radius: 50%;
+	}
+
+	.target::after {
+		border: 2px solid currentColor;
+		box-sizing: border-box;
+	}
+
 	.cell {
+		position: relative;
 		width: 10px;
 		height: 10px;
 		margin-left: -1px;

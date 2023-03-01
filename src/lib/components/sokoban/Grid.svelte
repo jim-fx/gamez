@@ -25,7 +25,9 @@
     --cell-gradient: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 `}
 >
-	<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
+	{#if arrow}
+		<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
+	{/if}
 	{#each cells as cell, i}
 		<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
 	{/each}

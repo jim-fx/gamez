@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { cellSize } from './constants';
+	import { fade } from 'svelte/transition';
 
 	export let width: number = 5;
 	export let height: number = 5;
 
-	export let start: null | number = null;
-	export let end: null | number = null;
+	export let start: number;
+	export let end: number;
 	export let color: string = 'red';
 
 	let _color = color;
@@ -17,25 +18,9 @@
 	let visible = false;
 	let animationDone = false;
 
-	let arrowProps: null | { x1: number; x2: number; y1: number; y2: number } = null;
-	$: if (typeof start === 'number' && typeof end === 'number') {
-		arrowProps = calculateArrowProps();
-		tick().then(() => {
-			setTimeout(() => {
-				animationDone = true;
-			}, 700);
-			visible = true;
-		});
-	} else {
-		console.log('hid');
-		visible = false;
-		setTimeout(() => {
-			animationDone = false;
-		}, 700);
-	}
+	let arrowProps = calculateArrowProps();
 
 	function calculateArrowProps() {
-		if (start === null || end === null) return null;
 		const startX = start % width;
 		const startY = Math.floor(start / width);
 
@@ -60,10 +45,20 @@
 			y2
 		};
 	}
+
+	onMount(() => {
+		setTimeout(() => {
+			animationDone = true;
+		}, 1100);
+		setTimeout(() => {
+			visible = true;
+		}, 10);
+	});
 </script>
 
 <svg
 	fill="none"
+	out:fade
 	viewBox="0 0 {width * cellSize} {height * cellSize}"
 	xmlns="http://www.w3.org/2000/svg"
 	style={`color: var(--${_color}50)`}
@@ -139,7 +134,7 @@
 		fill: none;
 		opacity: 0;
 		transition: opacity 0.3s;
-		transition-delay: 0.7s;
+		transition-delay: 0.5s;
 	}
 	.visible marker > path {
 		opacity: 1;

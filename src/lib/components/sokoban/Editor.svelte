@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Tab from '$lib/components/tab';
 	import localStore from '$lib/localStore';
-	import { writable, type Writable } from 'svelte/store';
+	import type { Writable } from 'svelte/store';
 	import Icon from '../Icon.svelte';
 	import { colors } from './constants';
 	import type { BoardState } from './core';
@@ -10,15 +10,26 @@
 
 	export let state: BoardState;
 
+	console.log('render editor');
+
 	const activeView: Writable<'map' | 'game'> = localStore('sokoban-editor-view', 'map');
 
 	$: amount = state.width * state.height;
-	let ballAmount = localStore('sokoban-editor-ball-amount', 1);
-	let gameSteps = 0;
+	$: ballAmount = state.balls.length;
+	let _ballAmount = ballAmount;
 
-	$: if ($ballAmount > 0) {
-		state.balls = state.balls.slice(0, $ballAmount);
+	function updateBallAmount() {
+		if (_ballAmount === 0) return;
+		if (_ballAmount < ballAmount) {
+			state.balls = state.balls.slice(0, _ballAmount);
+		} else {
+			state.balls = state.balls.concat(
+				Array.from({ length: _ballAmount - ballAmount }, () => ({ start: 0, target: 0 }))
+			);
+		}
 	}
+
+	let gameSteps = 0;
 
 	$: if (state.cells.includes(undefined)) {
 		state.cells = state.cells.map((v) => (Boolean(v) ? 1 : 0));
@@ -28,29 +39,24 @@
 		state.steps.worst = state.steps.best + 1;
 	}
 
-	$: balls = arrayToMap(state.balls.map((b) => b.start).filter((v) => typeof v === 'number'));
-	$: targets = arrayToMap(state.balls.map((b) => b.target).filter((v) => typeof v === 'number'));
-
 	let _width = state.width;
 	let _height = state.height;
-	$: if (state.width * state.height !== state.cells.length) {
-		state.balls = state.balls.map((b) => {
-			const bx = b.start % _width;
-			const by = Math.floor(b.start / _height);
-			const tx = b.target % _width;
-			const ty = Math.floor(b.target / _height);
-			if (bx > state.width || by > state.height) {
-				b.start = null;
-			} else {
-				b.start = by * state.width + bx;
-			}
-			if (tx > state.width || ty > state.height) {
-				b.target = null;
-			} else {
-				b.target = ty * state.width + tx;
-			}
-			return b;
-		});
+	$: console.log({ h: state.height, oh: _height, w: state.width, ow: _width });
+	$: if (state.height !== _height || state.width !== _width) {
+		if (state.height !== _height) {
+			state.balls = state.balls.map((b) => {
+				if (b.target >= _width * _height) {
+					b.target = -1;
+				}
+				if (b.start >= _width * _height) {
+					b.start = -1;
+				}
+				return b;
+			});
+		}
+
+		// state.balls = state.balls.map((b) => {
+		// });
 
 		const cells = new Array(state.width * state.height).fill(0).map((_, i) => {
 			const nx = i % state.width;
@@ -65,6 +71,19 @@
 		_width = state.width;
 		_height = state.height;
 	}
+
+	$: if (_ballAmount !== ballAmount) {
+		updateBallAmount();
+		_ballAmount = ballAmount;
+	}
+
+	$: balls = arrayToMap(
+		state.balls.map((b) => b.start).filter((v) => v > -1 && typeof v === 'number')
+	);
+	$: targets = arrayToMap(
+		state.balls.map((b) => b.target).filter((v) => v > -1 && typeof v === 'number')
+	);
+	// $: console.log({ balls, targets });
 
 	function toggleActiveCell(index: number) {
 		state.cells[index] = state.cells[index] === 1 ? 0 : 1;
@@ -110,7 +129,6 @@
 				ball.target = index;
 			}
 			state.balls[targetIndex] = ball;
-			console.log({ dragTarget, index, balls: state.balls });
 			dragTarget = null;
 		}
 	}
@@ -213,9 +231,9 @@
 
 				<br />
 				<label for="balls">Balls</label>
-				<input id="balls" type="number" bind:value={$ballAmount} min="1" max="4" step="1" />
+				<input id="balls" type="number" bind:value={_ballAmount} min="1" max="4" step="1" />
 
-				{#each Array.from({ length: $ballAmount }) as _, index}
+				{#each Array.from({ length: ballAmount }) as _, index}
 					<div class="ball-wrapper">
 						<div
 							class="ball"

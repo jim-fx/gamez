@@ -7,7 +7,10 @@
 		return d.puzzle.split('').map((x) => (x === '-' ? null : parseInt(x)));
 	}
 
-	const grid = genSudoku();
+	let grid = genSudoku();
+	if (!grid) {
+		grid = genSudoku();
+	}
 </script>
 
 <Sudoku {grid} />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { nanoid } from 'nanoid';
-	import { rotateVec2, addVec, radiansToDegrees, vecLength } from '$lib/math';
+	import { rotateVec2, addVec, radiansToDegrees, vecLength, mod } from '$lib/math';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
 	import { writable } from 'svelte/store';
@@ -66,7 +66,7 @@
 
 	function calculateAngle(vec: number[]) {
 		const angle = radiansToDegrees(Math.atan2(vec[0], vec[1]));
-		return 180 - angle - rotation;
+		return mod(180 - angle - rotation, 360);
 	}
 
 	$: angle = calculateAngle(mouseVec);
@@ -188,55 +188,6 @@
 					</clipPath>
 				{/each}
 
-				<filter id="small-shadow" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-					<feFlood flood-opacity="0" result="BackgroundImageFix" />
-					<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-					<feColorMatrix
-						in="SourceAlpha"
-						type="matrix"
-						values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-						result="hardAlpha"
-					/>
-					<feOffset dx="-1" dy="2" />
-					<feGaussianBlur stdDeviation="2" />
-					<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-					<feColorMatrix
-						type="matrix"
-						values="0 0 0 0 0.244097 0 0 0 0 0.244097 0 0 0 0 0.316667 0 0 0 0.43 0"
-					/>
-					<feBlend mode="normal" in2="shape" result="effect1_innerShadow_19_20" />
-					<feColorMatrix
-						in="SourceAlpha"
-						type="matrix"
-						values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-						result="hardAlpha"
-					/>
-					<feOffset dx="-5" dy="-5" />
-					<feGaussianBlur stdDeviation="3.5" />
-					<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-					<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-					<feBlend
-						mode="normal"
-						in2="effect1_innerShadow_19_20"
-						result="effect2_innerShadow_19_20"
-					/>
-					<feColorMatrix
-						in="SourceAlpha"
-						type="matrix"
-						values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-						result="hardAlpha"
-					/>
-					<feOffset dx="5" dy="5" />
-					<feGaussianBlur stdDeviation="10" />
-					<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-					<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-					<feBlend
-						mode="normal"
-						in2="effect2_innerShadow_19_20"
-						result="effect3_innerShadow_19_20"
-					/>
-				</filter>
-
 				<filter id="big-shadow" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 					<feFlood flood-opacity="0" result="BackgroundImageFix" />
 					<feColorMatrix
@@ -293,7 +244,7 @@
 			</defs>
 			<g filter="url(#big-shadow)">
 				{#each _items as item, i}
-					<g class="segment" class:active={index === i} filter="url(#small-shadow)">
+					<g class="segment" class:active={index === i}>
 						<path d={item.path} fill="#252530" clip-path="url(#segment-{menuId}-{i})" />
 						<path
 							d={item.path}

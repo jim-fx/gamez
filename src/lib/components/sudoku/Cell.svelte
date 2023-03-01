@@ -64,18 +64,19 @@
 		place-items: center;
 		color: var(--text);
 		transition: background 0.1s ease, color 0.1s ease, font-weight 0.2s ease;
+		color: var(--indigo50);
 	}
 
 	.initial {
-		color: #f5f5f588;
-		/* font-weight: bold; */
+		color: var(--text);
 	}
 
 	.hovered {
-		background: #f5f5f522;
+		background: var(--neutral600);
 		color: var(--text-strong);
 	}
 	.hovered-same {
-		background: #f5f5f588;
+		background: var(--neutral300);
+		color: var(--neutral10);
 	}
 </style>
