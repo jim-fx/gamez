@@ -26,6 +26,7 @@ specifiers:
   svelte: ^3.55.1
   svelte-check: ^3.0.4
   tslib: ^2.5.0
+  typesafe-i18n: ^5.24.1
   typescript: ^4.9.5
   unocss: ^0.50.1
   vite: ^4.1.4
@@ -40,6 +41,7 @@ dependencies:
   lz-string: 1.4.4
   nanoid: 4.0.1
   sudoku-gen: 1.0.0
+  typesafe-i18n: 5.24.1_typescript@4.9.5
 
 devDependencies:
   '@histoire/plugin-svelte': 0.15.8_zv5jpimbpampypsbzeytlgzkqy
@@ -3205,11 +3207,19 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /typesafe-i18n/5.24.1_typescript@4.9.5:
+    resolution: {integrity: sha512-CN5UcrRoqLZZXzJuhlg02hCCQNdOIprU/NQmT+p0S4tsGyl8330oSygev9RLibxpj4EyqThqG7cX8mNGl41c6g==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=3.5.1'
+    dependencies:
+      typescript: 4.9.5
+    dev: false
+
   /typescript/4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /uc.micro/1.0.6:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}

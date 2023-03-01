@@ -14,7 +14,8 @@
     "story:build": "histoire build",
     "story:preview": "histoire preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "typesafe-i18n": "typesafe-i18n"
   },
   "devDependencies": {
     "@histoire/plugin-svelte": "^0.15.8",
@@ -50,6 +51,7 @@
     "@unocss/preset-uno": "^0.50.1",
     "lz-string": "^1.4.4",
     "nanoid": "^4.0.1",
-    "sudoku-gen": "^1.0.0"
+    "sudoku-gen": "^1.0.0",
+    "typesafe-i18n": "^5.24.1"
   }
 }
