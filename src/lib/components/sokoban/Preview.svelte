@@ -15,7 +15,6 @@
 
 	$: balls = arrayToMap(state.balls.map((b) => b.start));
 	$: targets = arrayToMap(state.balls.map((b) => b.target));
-	$: console.log(balls, targets);
 
 	const borderR = '5px';
 	const none = '0px';

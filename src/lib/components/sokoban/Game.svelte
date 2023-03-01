@@ -6,13 +6,16 @@
 	import { getContext, setContext } from './context';
 	import historyStore from '$lib/historyStore';
 	import RadialMenu from '../RadialMenu.svelte';
-	import { compare } from './utils';
+	import { calculateRating, compare } from './utils';
 	import Stars from '../star/Stars.svelte';
 	import { writable, type Writable } from 'svelte/store';
 
 	export let state: BoardState = defaultGame;
 	export let won = false;
 	export let showRating = false;
+	export let steps = 0;
+	export let rating = 4;
+	export let animate = false;
 
 	$: ({ width, height } = state);
 
@@ -21,19 +24,13 @@
 	let balls = historyStore(
 		state.balls.filter((b) => b.start > -1 && b.target > -1).map((b) => b.start)
 	);
-	export let steps = 0;
 	$: _steps = balls.activeIndex;
 	$: if ($_steps) {
 		steps = $_steps;
 	}
 	$: targets = state.balls.map((b) => b.target);
 	$: won = compare($balls, targets);
-	$: rating =
-		5 -
-		Math.min(
-			Math.floor((($_steps - state.steps.best) / (state.steps.worst - state.steps.best)) * 4),
-			4
-		);
+	$: rating = calculateRating($_steps, state.steps.best, state.steps.worst);
 
 	function calculateNextPosition(ballIndex: number, dir: Direction) {
 		let ballPos = $balls[ballIndex];
@@ -190,6 +187,7 @@
 />
 <div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
 	<Grid
+		{animate}
 		width={state.width}
 		height={state.height}
 		cells={state.cells}

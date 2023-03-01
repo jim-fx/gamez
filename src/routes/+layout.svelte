@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
+	import { setLocale } from '../i18n/i18n-svelte';
 	import { RadialMenu } from '$lib/components';
 	import '@fontsource/nunito';
 	import { onMount } from 'svelte';
 	import 'uno.css';
 	import './global.css';
+
+	import type { LayoutData } from './$types';
+	export let data: LayoutData;
+
+	setLocale(data.locale);
 
 	const items = [
 		{

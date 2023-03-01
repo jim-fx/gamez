@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export let amount = 5;
 	export let rating = 0;
+	export let delay = 0;
+	export let animate = false;
 	export let interactive: boolean | null = null;
 	export let size: 'small' | 'medium' | 'large' = 'medium';
+
+	let visible = false;
+
 	import star from './star.png';
 
 	function handleClick(index: number) {
@@ -16,21 +23,30 @@
 			rating = index + 1;
 		}
 	}
+
+	onMount(() => {
+		setTimeout(() => {
+			visible = true;
+		}, 100);
+	});
 </script>
 
 <div
 	class="wrapper"
 	class:interactive
+	class:animate
+	class:visible={!animate || visible}
 	style={`
-        --star-url: url(${star}); 
-        --star-size: ${size === 'small' ? 10 : size === 'medium' ? 20 : 30}px;
-        --padding: ${size === 'small' ? 7 : size === 'medium' ? 10 : 20}px;
+    --star-url: url(${star}); 
+    --star-size: ${size === 'small' ? 10 : size === 'medium' ? 20 : 30}px;
+    --padding: ${size === 'small' ? 7 : size === 'medium' ? 10 : 20}px;
 `}
 >
 	{#each new Array(amount) as _, i}
 		<div
 			class="star"
 			class:enabled={i < rating}
+			style={`--delay: ${delay + i * 300}ms`}
 			on:click={() => handleClick(i)}
 			on:keypress={(e) => handleKeyPress(e, i)}
 		>
@@ -90,7 +106,14 @@
 		position: relative;
 		width: var(--star-size);
 		height: var(--star-size);
-		will-change: transform;
+		transform: scale(0.5);
+		opacity: 0;
+		transition: transform 0.3s, opacity 0.3s;
+		transition-delay: var(--delay);
+	}
+	.visible .star {
+		opacity: 1;
+		transform: scale(1);
 	}
 
 	.star::after {

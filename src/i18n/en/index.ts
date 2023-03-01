@@ -1,8 +1,14 @@
 import type { Translation } from '../i18n-types.js'
 
 const en = {
-	// this is an example Translation, just rename or delete this folder if you want
-	HI: 'Hi {name}! Please leave a star if you like this project: https://github.com/ivanhofer/typesafe-i18n',
+  rating: {
+    1: "you can do better",
+    2: "not bad",
+    3: "okay",
+    4: "good",
+    5: "perfect!",
+  },
+  steps: "steps",
 } satisfies Translation
 
 export default en

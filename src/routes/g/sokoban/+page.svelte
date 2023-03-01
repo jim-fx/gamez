@@ -4,32 +4,36 @@
 	import Preview from '$lib/components/sokoban/Preview.svelte';
 	import Stars from '$lib/components/star/Stars.svelte';
 	import Tab from '$lib/components/tab';
+	import LL from '../../../i18n/i18n-svelte';
 	import localStore from '$lib/localStore';
+	import { scale, fade } from 'svelte/transition';
+	import { get } from 'svelte/store';
+	import Button from '$lib/components/Button.svelte';
 	let won = false;
 
 	const currentLevel = localStore('sokoban-current-level', 0);
 	$: levelString = levels[$currentLevel];
 
-	const savedGames = localStore<{ [hash: string]: { steps: number; createdAt: number } }>(
+	const savedGames = localStore<{ [hash: string]: { rating: number; createdAt: number } }>(
 		'sokoban-saved-games',
 		{}
 	);
 
 	$: maxLevel = Object.keys($savedGames).length;
 
+	let rating = 0;
 	let steps = 0;
 	$: level = decodeSokobanBoard(levelString);
 	$: if ($currentLevel > -1) {
 		won = false;
-		steps = 0;
+		rating = 0;
 	}
 
 	$: if (won) {
 		const saveGame = $savedGames[levelString];
-		if ((!saveGame || saveGame.steps > steps) && steps > 0) {
-			console.log('SaveGame', { levelString, steps: steps });
+		if ((!saveGame || saveGame.rating < rating) && rating > 0) {
 			$savedGames[levelString] = {
-				steps: steps,
+				rating,
 				createdAt: Date.now()
 			};
 		}
@@ -40,27 +44,42 @@
 		if (levelIndex > maxLevel) {
 			return 0;
 		}
-		console.log({ level, save: $savedGames });
 
 		if (level in $savedGames) {
-			const { steps } = $savedGames[level];
-			const l = decodeSokobanBoard(level);
-
-			console.log({ level, steps, _steps: l.steps });
-
-			const rating =
-				5 - Math.min(Math.floor(((steps - l.steps.best) / (l.steps.worst - l.steps.best)) * 4), 4);
+			const { rating } = $savedGames[level];
 			return rating;
 		}
 
 		return 0;
 	}
+
+	function handleRestart() {
+		won = false;
+		level = decodeSokobanBoard(levelString);
+	}
 </script>
 
+<h1>Level {$currentLevel + 1}</h1>
 <div class="game-wrapper" class:visible={!showLevels}>
-	<h1>Level {$currentLevel + 1}</h1>
+	{#if won}
+		<div class="won" in:fade={{ delay: 1000 }} out:fade>
+			<h2 in:scale={{ delay: 1500 }}>{$LL.rating[rating.toString()]()}</h2>
+			<span in:scale={{ delay: 1750 }}>
+				<Stars {rating} animate delay={1750} />
+			</span>
+			<p in:scale={{ delay: 1900 }}>{steps} {$LL.steps()}</p>
+			{#if rating < 3}
+				<span in:scale={{ delay: 2000 }}>
+					<Button on:click={handleRestart}>
+						<div class="i-tabler-reload" />
+						try again
+					</Button>
+				</span>
+			{/if}
+		</div>
+	{/if}
 	{#key level}
-		<Sokoban showRating={won} bind:won state={level} bind:steps />
+		<Sokoban bind:won state={level} bind:rating bind:steps animate />
 	{/key}
 </div>
 <div class="controls" class:show-levels={showLevels}>
@@ -134,6 +153,11 @@
 	}
 	h1 {
 		margin: 0;
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		font-weight: lighter;
+		color: var(--text);
 	}
 	.controls {
 		display: grid;
@@ -205,6 +229,7 @@
 	}
 
 	.game-wrapper {
+		position: relative;
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 0.3s ease;
@@ -213,6 +238,30 @@
 	.game-wrapper.visible {
 		opacity: 1;
 		pointer-events: auto;
+	}
+
+	.won {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		z-index: 20;
+		background: var(--neutral900);
+		width: 160%;
+		height: 160%;
+		margin-left: -30%;
+		margin-top: -30%;
+	}
+	.won > p {
+		color: var(--text);
+	}
+
+	.won > h2 {
+		color: var(--neutral10);
+		margin: 20px;
+		font-size: 4rem;
+		white-space: nowrap;
 	}
 
 	.tab {

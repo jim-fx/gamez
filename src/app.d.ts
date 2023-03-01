@@ -1,12 +1,13 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface Platform {}
-	}
-}
+/// <reference types="@sveltejs/kit" />
 
-export {};
+type Locales = import('$i18n/i18n-types').Locales
+type TranslationFunctions = import('$i18n/i18n-types').TranslationFunctions
+
+declare namespace App {
+  interface Locals {
+    locale: Locales
+    LL: TranslationFunctions
+  }
+
+  // interface Platform { }
+}

@@ -9,9 +9,13 @@ const config = {
   // for more information about preprocessors
   preprocess: vitePreprocess(),
 
+  // dev: true,
   kit: {
     paths: {
       base: BASE_PATH
+    },
+    alias: {
+      $i18n: 'src/i18n',
     },
     adapter: adapter()
   }

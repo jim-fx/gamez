@@ -3,11 +3,13 @@
 	import BallComponent from './Ball.svelte';
 	import { arrayToMap } from './utils';
 	import Arrow from './Arrow.svelte';
+	import { fade, scale } from 'svelte/transition';
 	export let width: number = 5;
 	export let height: number = 5;
 	export let cells: number[];
 	export let balls: number[];
 	export let targets: number[];
+	export let animate = false;
 
 	export let arrow: { start: number; end: number; color: string } | null = null;
 
@@ -15,7 +17,7 @@
 </script>
 
 {#each balls as ball, i}
-	<BallComponent index={i} position={ball} target={targets[i]} />
+	<BallComponent {animate} index={i} position={ball} target={targets[i]} />
 {/each}
 <div
 	class="grid-wrapper"
@@ -29,7 +31,13 @@
 		<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
 	{/if}
 	{#each cells as cell, i}
-		<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
+		{#if animate}
+			<span in:scale={{ delay: i * 10 }}>
+				<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
+			</span>
+		{:else}
+			<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
+		{/if}
 	{/each}
 </div>
 

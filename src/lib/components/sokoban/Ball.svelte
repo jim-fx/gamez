@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { getContext } from './context';
 	import { cellSize, colors, Direction } from './constants';
+	import { fade, scale } from 'svelte/transition';
 
 	export let index: number;
 	export let position: number;
 	export let target: number;
+	export let animate = false;
 
 	const { getPosition, moveBall, getPossibleMoves } = getContext('sokoban');
 
@@ -63,6 +65,12 @@
 		mouseDown = null;
 		dragPosition = null;
 	}
+
+	const style = `
+    --color: var(--${colors[index]}50);
+    --color-light: var(--${colors[index]}0);
+    --color-dark: var(--${colors[index]}300);
+`;
 </script>
 
 <div
@@ -71,15 +79,13 @@
 	on:mousedown={handleMouseDown}
 	class:hovered={mouseDown}
 >
-	<div
-		class="ball"
-		class:isAtTarget
-		style={`
-    --color: var(--${colors[index]}50);
-    --color-light: var(--${colors[index]}0);
-    --color-dark: var(--${colors[index]}300);
-`}
-	/>
+	{#if animate}
+		<span in:scale={{ delay: _position * 10 }}>
+			<div class="ball" class:isAtTarget {style} />
+		</span>
+	{:else}
+		<div class="ball" class:isAtTarget {style} />
+	{/if}
 </div>
 
 <svelte:window
