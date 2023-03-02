@@ -54,7 +54,7 @@
 		opacity: 0.15;
 	}
 
-	:global(body) {
+	:global(main) {
 		display: grid;
 		place-items: center;
 		height: 100vh;

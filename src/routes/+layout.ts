@@ -3,8 +3,8 @@ import { setLocale } from '$i18n/i18n-svelte';
 import type { Locales } from '$i18n/i18n-types';
 import { loadLocaleAsync } from '$i18n/i18n-util.async';
 import type { LayoutLoad } from './$types';
-
-export const load: LayoutLoad<{ locale: Locales }> = async ({ data: { locale = "de" } }) => {
+export const load: LayoutLoad<{ locale: Locales }> = async ({ url, data: { locale = "de" } }) => {
+  const { pathname } = url
   // load dictionary into memory
   await loadLocaleAsync(locale)
 
@@ -14,5 +14,8 @@ export const load: LayoutLoad<{ locale: Locales }> = async ({ data: { locale = "
   // get the translation functions value from the store
 
   // pass locale to the "rendering context"
-  return { locale }
+  return {
+    locale,
+    pathname
+  }
 }

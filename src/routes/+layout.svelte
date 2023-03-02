@@ -9,6 +9,7 @@
 	import './global.css';
 
 	import type { LayoutData } from './$types';
+	import { fade } from 'svelte/transition';
 	export let data: LayoutData;
 
 	setLocale(data.locale);
@@ -44,16 +45,18 @@
 
 	let body: HTMLElement | null = null;
 
+	function checkTarget(e: HTMLElement) {
+		return e.nodeName === 'MAIN';
+	}
+
 	onMount(() => {
 		import('virtual:unocss-devtools');
-		body = document.body;
 	});
 </script>
 
-<RadialMenu target={body} {items} on:select={handleSelect} />
-<svelte:body bind:this={body} />
-
-<slot />
-
-<style global>
-</style>
+<RadialMenu target={checkTarget} {items} on:select={handleSelect} />
+{#key data.pathname}
+	<main bind:this={body} in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 300 }}>
+		<slot />
+	</main>
+{/key}

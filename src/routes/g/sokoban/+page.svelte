@@ -151,7 +151,7 @@
 </div>
 
 <style>
-	:global(body) {
+	:global(main) {
 		display: grid;
 		place-items: center;
 		grid-template-rows: 1fr 100px;
