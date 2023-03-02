@@ -6,13 +6,16 @@ function isStore(v: unknown): v is Writable<unknown> {
 
 const HISTORY_AMOUNT = 100;
 
-export default function historyStore<T>(initialValue: T | Writable<T>) {
+export default function historyStore<T>(initialValue: T | Writable<T>, opts: { activeIndex?: number, history?: T[] } = {}) {
 
-  const store = isStore(initialValue) ? initialValue : writable(initialValue);
+  const store = (opts?.history && opts?.activeIndex !== undefined && opts?.history[opts?.activeIndex])
+    ? writable(opts?.history[opts?.activeIndex])
+    : isStore(initialValue) ? initialValue : writable(initialValue);
+
   const { subscribe, set: _set } = store;
 
-  const activeIndex = writable(0);
-  let history: T[] = [get(store)];
+  const activeIndex = writable(opts?.activeIndex ?? 0);
+  let history: T[] = opts?.history ?? [get(store)];
 
   function addValue(newValue: T) {
     const currentIndex = get(activeIndex);

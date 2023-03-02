@@ -2,9 +2,11 @@
 	import { writable, type Writable } from 'svelte/store';
 	import { createContext } from './context';
 
-	const tabs: { index: Writable<number>; value: string | null }[] = [];
+	const tabs: { index: Writable<number>; value: string | undefined }[] = [];
 
-	export let value: string | null = null;
+	export let value: string | undefined = undefined;
+
+	export let noise = false;
 
 	export let style = '';
 	export let contentStyle = '';
@@ -18,8 +20,10 @@
 		contentStyle,
 		setActiveTab: (index: number) => {
 			if (!showActiveState) return;
-			activeTab.set(index);
-			value = tabs[index].value;
+			if (tabs[index].value !== undefined) {
+				activeTab.set(index);
+				value = tabs[index].value;
+			}
 		},
 		registerTab: (tabValue?: string) => {
 			if (tabValue) {
@@ -33,7 +37,7 @@
 			}
 
 			const index = writable(tabs.length);
-			tabs.push({ index, value: tabValue || null });
+			tabs.push({ index, value: tabValue || undefined });
 			return index;
 		},
 		unregisterTab: (index: number) => {
@@ -45,7 +49,7 @@
 	});
 </script>
 
-<div class="wrapper" {style}><slot /></div>
+<div class="wrapper" class:noise {style}><slot /></div>
 
 <style>
 	.wrapper {
@@ -59,7 +63,20 @@
 		background: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 	}
 
-	:global(.wrapper > .wrapper:last-child) {
+	.wrapper.noise::before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background: url(/noise.png);
+		background-size: 100px;
+		opacity: 0.3;
+		background-attachment: fixed;
+		pointer-events: none;
+	}
+
+	.wrapper > :global(div:last-child),
+	.wrapper > :global(div:last-child > .tab-content-wrapper) {
 		border: none;
 	}
 </style>

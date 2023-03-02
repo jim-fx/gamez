@@ -9,6 +9,7 @@ const de = {
     5: "perfekt!",
   },
   steps: "Schritte",
+  try_again: "Nochmal versuchen",
 } satisfies BaseTranslation
 
 export default de

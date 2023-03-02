@@ -40,6 +40,10 @@ type RootTranslation = {
 	 * S​c​h​r​i​t​t​e
 	 */
 	steps: string
+	/**
+	 * N​o​c​h​m​a​l​ ​v​e​r​s​u​c​h​e​n
+	 */
+	try_again: string
 }
 
 export type TranslationFunctions = {
@@ -69,6 +73,10 @@ export type TranslationFunctions = {
 	 * Schritte
 	 */
 	steps: () => LocalizedString
+	/**
+	 * Nochmal versuchen
+	 */
+	try_again: () => LocalizedString
 }
 
 export type Formatters = {}

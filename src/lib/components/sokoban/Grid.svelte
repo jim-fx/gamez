@@ -48,4 +48,7 @@
 		grid-gap: 0;
 		width: fit-content;
 	}
+	span {
+		pointer-events: none;
+	}
 </style>

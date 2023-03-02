@@ -24,7 +24,7 @@
 </script>
 
 <div
-	class="wrapper"
+	class="tab-content-wrapper"
 	class:disabled
 	style={ctx.contentStyle}
 	on:keydown={(e) => {
@@ -39,7 +39,7 @@
 </div>
 
 <style>
-	.wrapper {
+	.tab-content-wrapper {
 		padding: 0.5em;
 		width: fit-content;
 		border-right: solid 1px var(--outline);
@@ -48,11 +48,22 @@
 		position: relative;
 		display: grid;
 		place-items: center;
+		transition: color 0.2s ease, background-color 0.2s ease;
 	}
 
 	.active {
+		color: var(--neutral10);
+	}
+
+	.active::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0.2;
 		background-color: var(--neutral100);
-		color: var(--neutral800);
 	}
 
 	.disabled {

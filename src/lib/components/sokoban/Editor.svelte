@@ -10,8 +10,6 @@
 
 	export let state: BoardState;
 
-	console.log('render editor');
-
 	const activeView: Writable<'map' | 'game'> = localStore('sokoban-editor-view', 'map');
 
 	$: amount = state.width * state.height;
@@ -41,7 +39,6 @@
 
 	let _width = state.width;
 	let _height = state.height;
-	$: console.log({ h: state.height, oh: _height, w: state.width, ow: _width });
 	$: if (state.height !== _height || state.width !== _width) {
 		if (state.height !== _height) {
 			state.balls = state.balls.map((b) => {
@@ -83,7 +80,6 @@
 	$: targets = arrayToMap(
 		state.balls.map((b) => b.target).filter((v) => v > -1 && typeof v === 'number')
 	);
-	// $: console.log({ balls, targets });
 
 	function toggleActiveCell(index: number) {
 		state.cells[index] = state.cells[index] === 1 ? 0 : 1;

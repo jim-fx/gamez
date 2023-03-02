@@ -7,7 +7,6 @@
 	import LL from '../../../i18n/i18n-svelte';
 	import localStore from '$lib/localStore';
 	import { scale, fade } from 'svelte/transition';
-	import { get } from 'svelte/store';
 	import Button from '$lib/components/Button.svelte';
 	let won = false;
 
@@ -72,7 +71,7 @@
 				<span in:scale={{ delay: 2000 }}>
 					<Button on:click={handleRestart}>
 						<div class="i-tabler-reload" />
-						try again
+						{$LL.try_again()}
 					</Button>
 				</span>
 			{/if}
@@ -115,9 +114,9 @@
 		</Tab>
 	</div>
 	<div class="controls-difficulty" />
-	<div class="controls-level-wrapper">
+	<table class="controls-level-wrapper">
 		{#each levels as level, i}
-			<div
+			<tr
 				class="controls-level"
 				on:click={() => {
 					$currentLevel = i;
@@ -137,12 +136,18 @@
 						<Icon name="lock" size="medium" />
 					</div>
 				{/if}
-				<h3>Level {i + 1}</h3>
-				<Stars rating={calculateLevelRating(level, i, savedGames)} size="small" />
-				<Preview {level} />
-			</div>
+				<td>
+					<h3>Level {i + 1}</h3>
+				</td>
+				<td>
+					<Stars rating={calculateLevelRating(level, i, savedGames)} size="small" />
+				</td>
+				<td class="preview">
+					<Preview {level} />
+				</td>
+			</tr>
 		{/each}
-	</div>
+	</table>
 </div>
 
 <style>
@@ -183,17 +188,19 @@
 
 	.controls-level-wrapper {
 		width: 300px;
+		border-collapse: collapse;
 	}
 
 	.controls-level {
 		position: relative;
-		display: flex;
 		cursor: pointer;
-		overflow-y: scroll;
-		justify-content: space-between;
-		padding: 1.5em 1em;
+		height: 80px;
 		border-bottom: 1px solid var(--outline);
 		align-items: center;
+	}
+
+	.preview > :global(.grid) {
+		margin: 0 auto;
 	}
 
 	.controls-level.active {
@@ -226,6 +233,7 @@
 		z-index: 5;
 		color: var(--text);
 		margin: 0;
+		padding-left: 1em;
 	}
 
 	.game-wrapper {
@@ -293,7 +301,7 @@
 	}
 
 	.controls.show-levels {
-		max-height: calc(100vh - 2rem);
+		max-height: 80vh;
 		width: 300px;
 
 		transition: max-height 0.3s 0.1s ease, width 0.3s ease;

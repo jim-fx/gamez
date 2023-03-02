@@ -5,7 +5,6 @@ import { loadLocaleAsync } from '$i18n/i18n-util.async';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad<{ locale: Locales }> = async ({ data: { locale = "de" } }) => {
-  console.log('layout load', locale);
   // load dictionary into memory
   await loadLocaleAsync(locale)
 

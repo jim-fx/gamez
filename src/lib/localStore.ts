@@ -8,15 +8,24 @@ const storeIds: Map<string, ReturnType<typeof createLocalStore>> = new Map();
 
 const HAS_LOCALSTORAGE = "localStorage" in globalThis;
 
+
 function createLocalStore<T>(key: string, initialValue: T | Writable<T>) {
 
-  const store = isStore(initialValue) ? initialValue : writable(initialValue);
+  let store: Writable<T>;
 
-  if (!HAS_LOCALSTORAGE) return store;
-
-  const value = localStorage.getItem(key);
-  if (value) {
-    store.set(JSON.parse(value));
+  if (HAS_LOCALSTORAGE) {
+    const value = JSON.parse(localStorage.getItem(key) ?? "null");
+    if (value === null) {
+      if (isStore(initialValue)) {
+        store = initialValue;
+      } else {
+        store = writable(initialValue);
+      }
+    } else {
+      store = writable(value);
+    }
+  } else {
+    return isStore(initialValue) ? initialValue : writable(initialValue);
   }
 
   store.subscribe((value) => {
@@ -29,6 +38,7 @@ function createLocalStore<T>(key: string, initialValue: T | Writable<T>) {
     update: store.update
   }
 }
+
 
 export default function localStore<T>(key: string, initialValue: T | Writable<T>): Writable<T> {
 

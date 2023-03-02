@@ -112,7 +112,6 @@ export function trimBoardState(b: BoardState): BoardState {
   }
 
   const g = groupArray([...b.cells], b.width)
-  console.table(g);
   b.width -= emptyColsLeft + emptyColsRight;
   b.height -= emptyRowsTop + emptyRowsBottom;
   b.cells = b.cells.filter((c) => c !== -1);

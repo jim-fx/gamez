@@ -73,7 +73,6 @@
 		position: absolute;
 		height: 100%;
 		width: 100%;
-		z-index: 99;
 		background: url(/noise.png);
 		background-size: 100px;
 		opacity: 0.3;
@@ -89,7 +88,7 @@
 		height: 100%;
 		border-radius: 50%;
 		opacity: 0.2;
-		transform: scale(0.6);
+		transform: scale(0.67);
 		border-color: var(--target-color);
 		border: 6px solid var(--target-color);
 		transition: transform 0.5s, opacity 0.5s, border-radius 0.3s, background 0.3s ease;

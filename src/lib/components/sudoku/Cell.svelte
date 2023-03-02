@@ -41,7 +41,7 @@
 	on:mouseover={() => hoveredIndex.set(index)}
 	on:focus={() => hoveredIndex.set(index)}
 	on:mouseleave={() => $hoveredIndex === index && ctx.hoveredIndex.set(-1)}
-	class:initial
+	class:own={!initial}
 	class:active={$activeIndex === index}
 	class:hovered-same={$hoveredValue === value}
 	class:hovered={$hoveredIndex === index ||
@@ -64,11 +64,12 @@
 		place-items: center;
 		color: var(--text);
 		transition: background 0.1s ease, color 0.1s ease, font-weight 0.2s ease;
-		color: var(--indigo50);
+		color: var(--text);
 	}
 
-	.initial {
-		color: var(--text);
+	.own {
+		color: var(--indigo50);
+		text-shadow: 0 0 10px var(--indigo50);
 	}
 
 	.hovered {

@@ -9,6 +9,9 @@
 		| 'edit'
 		| 'player-play'
 		| 'lock'
+		| 'chart-area-line'
+		| 'circle-x'
+		| 'grid-dots'
 		| 'menu-2';
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 
@@ -35,6 +38,12 @@
 	<div class="i-tabler-menu-2" style="width: {width}px; height: {width}px" />
 {:else if name === 'lock'}
 	<div class="i-tabler-lock" style="width: {width}px; height: {width}px" />
+{:else if name === 'chart-area-line'}
+	<div class="i-tabler-chart-area-line" style="width: {width}px; height: {width}px" />
+{:else if name === 'circle-x'}
+	<div class="i-tabler-circle-x" style="width: {width}px; height: {width}px" />
+{:else if name === 'grid-dots'}
+	<div class="i-tabler-grid-dots" style="width: {width}px; height: {width}px" />
 {/if}
 
 <style>

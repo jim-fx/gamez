@@ -9,6 +9,7 @@ const en = {
     5: "perfect!",
   },
   steps: "steps",
+  try_again: "try again",
 } satisfies Translation
 
 export default en
