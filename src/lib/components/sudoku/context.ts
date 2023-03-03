@@ -4,11 +4,11 @@ import type { Readable, Writable } from "svelte/store";
 export type Context = {
   activeIndex: Writable<number>,
   hoveredIndex: Writable<number>,
-  hoveredValue: Readable<number | null>,
+  hoveredValue: Readable<number>,
   getPosition: (index: number) => [number, number],
-  getCell: (index: number) => number | null,
+  getCell: (index: number) => number,
   getCellIndex: (row: number, col: number) => number,
-  setCell: (index: number, value: number | null) => void,
+  setCell: (index: number, value: number) => void,
   toggleActive: (index: number) => void,
 }
 

@@ -1,13 +1,14 @@
 <script lang="ts">
 	import Cell from './Cell.svelte';
 
-	export let grid: (number | null)[] = [];
-	export let custom: (number | null)[] = [];
+	export let grid: number[] = [];
+	export let custom: number[] = [];
+	export let errors: number[] = [];
 </script>
 
 <div class="sudoku-wrapper">
 	{#each grid as cell, i}
-		<Cell index={i} value={cell || custom[i]} initialValue={grid[i]} />
+		<Cell index={i} value={cell || custom[i]} initialValue={grid[i]} error={errors.includes(i)} />
 	{/each}
 </div>
 

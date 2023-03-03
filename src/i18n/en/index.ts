@@ -10,6 +10,12 @@ const en = {
   },
   steps: "steps",
   try_again: "try again",
+  time: {
+    days: "{days} {{day|days}}",
+    hours: "{hours} {{hour|hours}}",
+    minutes: "{minutes} {{minute|minutes}}",
+    seconds: "{seconds} {{second|seconds}}",
+  }
 } satisfies Translation
 
 export default en

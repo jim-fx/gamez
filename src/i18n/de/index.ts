@@ -10,6 +10,12 @@ const de = {
   },
   steps: "Schritte",
   try_again: "Nochmal versuchen",
+  time: {
+    days: "{days} {{Tag|Tage}}",
+    hours: "{hours} {{Stunde|Stunden}}",
+    minutes: "{minutes} {{Minute|Minuten}}",
+    seconds: "{seconds} {{Sekunde|Sekunden}}",
+  }
 } satisfies BaseTranslation
 
 export default de

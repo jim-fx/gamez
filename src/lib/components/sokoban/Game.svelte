@@ -16,14 +16,25 @@
 	export let steps = 0;
 	export let rating = 4;
 	export let animate = false;
+	export let showHistoryArrow: 'undo' | 'redo' | null = null;
+	export let undoPossible = false;
+	export let redoPossible = false;
+	export let undo: () => void = () => {};
+	export let redo: () => void = () => {};
 
 	$: ({ width, height } = state);
 
-	let wrapper: HTMLElement;
-
-	let balls = historyStore(
+	export let balls = historyStore(
 		state.balls.filter((b) => b.start > -1 && b.target > -1).map((b) => b.start)
 	);
+
+	$: if ($balls) {
+		redoPossible = balls.nextValue !== null;
+		undoPossible = balls.previousValue !== null;
+		undo = balls.undo;
+		redo = balls.redo;
+	}
+
 	$: _steps = balls.activeIndex;
 	$: if ($_steps) {
 		steps = $_steps;
@@ -138,9 +149,9 @@
 	];
 	let selectedItem: Writable<(typeof items)[number] | null> = writable(null);
 	function getArrowProps() {
-		if (!$selectedItem) return null;
+		if (!$selectedItem && showHistoryArrow === null) return null;
 
-		const direction = $selectedItem.value;
+		const direction = showHistoryArrow || $selectedItem?.value;
 
 		const currentState = $balls;
 		let nextState = direction === 'undo' ? balls.previousValue : balls.nextValue;
@@ -158,10 +169,7 @@
 
 		return null;
 	}
-	$: arrow = $selectedItem ? getArrowProps() : null;
-	$: if ($selectedItem) {
-		// arrow = getArrowProps();
-	}
+	$: arrow = $selectedItem || showHistoryArrow ? getArrowProps() : null;
 
 	function handleSelect(e: CustomEvent) {
 		if (e.detail === 'undo') {
@@ -185,7 +193,7 @@
 	on:select={handleSelect}
 	rotation={-90}
 />
-<div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`} bind:this={wrapper}>
+<div class="gamer-wrapper" style={`--cell-size: ${cellSize}px;`}>
 	<Grid
 		{animate}
 		width={state.width}

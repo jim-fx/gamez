@@ -1,3 +1,4 @@
+import { parse, stringify } from "devalue";
 import { writable, type Writable } from "svelte/store";
 
 function isStore(v: unknown): v is Writable<unknown> {
@@ -14,7 +15,8 @@ function createLocalStore<T>(key: string, initialValue: T | Writable<T>) {
   let store: Writable<T>;
 
   if (HAS_LOCALSTORAGE) {
-    const value = JSON.parse(localStorage.getItem(key) ?? "null");
+    const localValue = localStorage.getItem(key);
+    const value = localValue ? parse(localValue) : null;
     if (value === null) {
       if (isStore(initialValue)) {
         store = initialValue;
@@ -29,7 +31,7 @@ function createLocalStore<T>(key: string, initialValue: T | Writable<T>) {
   }
 
   store.subscribe((value) => {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, stringify(value));
   });
 
   return {

@@ -27,6 +27,9 @@
 	class="tab-content-wrapper"
 	class:disabled
 	style={ctx.contentStyle}
+	on:mouseover={() => dispatch('mouseover')}
+	on:focus={() => dispatch('mouseover')}
+	on:mouseleave={() => dispatch('mouseleave')}
 	on:keydown={(e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			ctx.setActiveTab($index);

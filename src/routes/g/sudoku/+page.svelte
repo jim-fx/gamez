@@ -1,16 +1,36 @@
 <script lang="ts">
 	import { Sudoku } from '$lib/components';
+	import Button from '$lib/components/Button.svelte';
+	import { formatTimeSpan } from '$lib/utils';
+	import { fade } from 'svelte/transition';
 	import Controls from './Controls.svelte';
 	import Settings from './Settings.svelte';
 	import Statistics from './Statistics.svelte';
-	import { view } from './stores';
+	import { createNewGame, view } from './stores';
 
-	import { grid, custom } from './stores';
+	import { currentGame, custom } from './stores';
+
+	let won = false;
+
+	$: if (won && !$currentGame.endAt) {
+		$currentGame.endAt = new Date();
+	}
 </script>
 
 <div class="wrapper">
 	{#if $view === 'game'}
-		<Sudoku grid={$grid} bind:custom={$custom} />
+		{#if won}
+			<div class="won" in:fade={{ delay: 1000 }}>
+				<div>
+					<h3>solved!</h3>
+					{#if $currentGame.endAt}
+						<p>{formatTimeSpan($currentGame.endAt.getTime() - $currentGame.startedAt.getTime())}</p>
+					{/if}
+					<Button on:click={createNewGame}>new game</Button>
+				</div>
+			</div>
+		{/if}
+		<Sudoku grid={$currentGame.initial} bind:custom={$custom} bind:won />
 	{:else if $view === 'settings'}
 		<Settings />
 	{:else if $view === 'statistics'}
@@ -21,6 +41,48 @@
 <Controls />
 
 <style>
+	.won {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 5;
+		color: white;
+		display: grid;
+		place-items: center;
+		backdrop-filter: blur(2px);
+	}
+	.won::before {
+		content: '';
+		opacity: 0.8;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background: var(--neutral900);
+		z-index: -1;
+	}
+
+	.won h3 {
+		font-size: 3rem;
+		font-weight: 100;
+		margin: 0;
+		padding: 0;
+	}
+
+	.won p {
+		color: var(--text);
+		margin: 0;
+		padding: 0;
+		margin-bottom: 20px;
+	}
+
+	.won > div {
+		display: grid;
+	}
+
 	.wrapper {
 		position: relative;
 		border: 1px solid black;

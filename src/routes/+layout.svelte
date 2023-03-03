@@ -4,7 +4,6 @@
 	import { setLocale } from '../i18n/i18n-svelte';
 	import { RadialMenu } from '$lib/components';
 	import '@fontsource/nunito';
-	import { onMount } from 'svelte';
 	import 'uno.css';
 	import './global.css';
 
@@ -48,10 +47,6 @@
 	function checkTarget(e: HTMLElement) {
 		return e.nodeName === 'MAIN';
 	}
-
-	onMount(() => {
-		import('virtual:unocss-devtools');
-	});
 </script>
 
 <RadialMenu target={checkTarget} {items} on:select={handleSelect} />
@@ -60,3 +55,9 @@
 		<slot />
 	</main>
 {/key}
+
+<style>
+	main {
+		height: 100%;
+	}
+</style>

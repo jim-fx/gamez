@@ -2,8 +2,9 @@
 	import { getContext } from './context';
 
 	export let index: number;
-	export let value: number | null;
-	export let initialValue: number | null = null;
+	export let value: number;
+	export let initialValue: number = 0;
+	export let error = false;
 
 	const ctx = getContext('grid');
 
@@ -11,7 +12,7 @@
 	const hoveredIndex = ctx.hoveredIndex;
 	const hoveredValue = ctx.hoveredValue;
 
-	const initial = initialValue !== null;
+	const initial = initialValue !== 0;
 
 	const [row, col] = ctx.getPosition(index);
 	const square = Math.floor(row / 3) * 3 + Math.floor(col / 3);
@@ -40,6 +41,7 @@
 	on:keydown={() => ctx.toggleActive(index)}
 	on:mouseover={() => hoveredIndex.set(index)}
 	on:focus={() => hoveredIndex.set(index)}
+	class:error
 	on:mouseleave={() => $hoveredIndex === index && ctx.hoveredIndex.set(-1)}
 	class:own={!initial}
 	class:active={$activeIndex === index}
@@ -55,6 +57,7 @@
 
 <style>
 	.cell-wrapper {
+		position: relative;
 		height: 40px;
 		width: 40px;
 		padding: 4px;
@@ -63,8 +66,28 @@
 		display: grid;
 		place-items: center;
 		color: var(--text);
-		transition: background 0.1s ease, color 0.1s ease, font-weight 0.2s ease;
+		transition: background 0.1s ease, color 0.1s ease, font-weight 0.4s ease;
 		color: var(--text);
+	}
+
+	.cell-wrapper::after {
+		border-radius: 50%;
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		transition: transform 0.3s ease, opacity 0.3s ease, border-radius 0.4s ease;
+		opacity: 0;
+		transform: scale(0.4);
+		background: var(--red50);
+	}
+
+	.error::after {
+		border-radius: 0%;
+		opacity: 0.2;
+		transform: scale(1);
 	}
 
 	.own {

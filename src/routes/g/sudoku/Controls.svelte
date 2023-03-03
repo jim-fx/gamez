@@ -38,28 +38,37 @@
 	}
 </script>
 
-<Tab
-	bind:value={$view}
-	showActiveState
-	noise
-	contentStyle={`padding: 0.8em;`}
-	style={`border-radius: 20px; `}
->
-	{#if $view === 'game'}
-		<div transition:scale style={`transform-origin: 100% 0%`}>
-			<Tab.Content on:click={() => custom.undo()} disabled={!undoPossible}
-				><Icon size="small" name="arrow-left" /></Tab.Content
-			>
-		</div>
-	{/if}
-	<Tab.Content value="settings"><Icon size="small" name="settings" /></Tab.Content>
-	<Tab.Content value="game"><Icon size="small" name="grid-dots" /></Tab.Content>
-	<Tab.Content value="statistics"><Icon size="small" name="chart-area-line" /></Tab.Content>
-	{#if $view === 'game'}
-		<div transition:scale style={`transform-origin: 0% 0%`}>
-			<Tab.Content on:click={() => custom.redo()} disabled={!redoPossible}
-				><Icon size="small" name="arrow-right" /></Tab.Content
-			>
-		</div>
-	{/if}
-</Tab>
+<div class="wrapper">
+	<Tab
+		bind:value={$view}
+		showActiveState
+		noise
+		contentStyle={`padding: 0.8em;`}
+		style={`border-radius: 20px; `}
+	>
+		{#if $view === 'game'}
+			<div transition:scale style={`transform-origin: 100% 0%`}>
+				<Tab.Content on:click={() => custom.undo()} disabled={!undoPossible}
+					><Icon size="small" name="arrow-left" /></Tab.Content
+				>
+			</div>
+		{/if}
+		<Tab.Content value="settings"><Icon size="small" name="settings" /></Tab.Content>
+		<Tab.Content value="game"><Icon size="small" name="grid-dots" /></Tab.Content>
+		<Tab.Content value="statistics"><Icon size="small" name="chart-area-line" /></Tab.Content>
+		{#if $view === 'game'}
+			<div transition:scale style={`transform-origin: 0% 0%`}>
+				<Tab.Content on:click={() => custom.redo()} disabled={!redoPossible}
+					><Icon size="small" name="arrow-right" /></Tab.Content
+				>
+			</div>
+		{/if}
+	</Tab>
+</div>
+
+<style>
+	.wrapper {
+		position: absolute;
+		bottom: 20px;
+	}
+</style>
