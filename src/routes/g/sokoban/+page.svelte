@@ -48,6 +48,9 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Gamez | Sokoban</title>
+</svelte:head>
 <h1>Level {$currentLevel + 1}</h1>
 <div class="game-wrapper" class:visible={!showLevels}>
 	{#if won}

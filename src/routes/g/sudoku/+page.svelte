@@ -17,6 +17,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Gamez | Sudoku</title>
+</svelte:head>
+
 <div class="wrapper">
 	{#if $view === 'game'}
 		{#if won}
