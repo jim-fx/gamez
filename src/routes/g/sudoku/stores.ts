@@ -1,7 +1,8 @@
+import { genSudoku } from "$lib/components/sudoku";
 import localHistoryStore from "$lib/localHistoryStore";
 import localStore from "$lib/localStore";
+import { compareArrays } from "$lib/utils";
 import { get, writable, type Writable } from "svelte/store";
-import { genSudoku } from "./utils";
 
 export const view: Writable<'game' | 'settings' | 'statistics'> = writable('game');
 
@@ -28,15 +29,6 @@ export const currentGame = localStore<Game>("sudoku-current-game", {
 })
 
 export const custom = localHistoryStore<number[]>('sudoku-custom', []);
-
-
-function compareArrays(arr1: number[], arr2: number[]) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) return false
-  }
-  return true;
-}
 
 export function createNewGame() {
   const _current = { ...get(currentGame), final: get(custom), endAt: new Date() };

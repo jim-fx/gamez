@@ -5,6 +5,9 @@
 	export let value: number;
 	export let initialValue: number = 0;
 	export let error = false;
+	export let tip: [number, number] | null = null;
+
+	export let showIndeces = false;
 
 	const ctx = getContext('grid');
 
@@ -42,6 +45,7 @@
 	on:mouseover={() => hoveredIndex.set(index)}
 	on:focus={() => hoveredIndex.set(index)}
 	class:error
+	class:tip
 	on:mouseleave={() => $hoveredIndex === index && ctx.hoveredIndex.set(-1)}
 	class:own={!initial}
 	class:active={$activeIndex === index}
@@ -52,6 +56,9 @@
 		hoveredSquare === square}
 	style="border-right: {borderRight}; border-bottom: {borderBottom};"
 >
+	{#if showIndeces}
+		<span class="index">{index}</span>
+	{/if}
 	{value || ''}
 </div>
 
@@ -90,9 +97,26 @@
 		transform: scale(1);
 	}
 
+	.index {
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		opacity: 0.5;
+		font-size: 0.6em;
+		color: var(--text-weak);
+	}
+
 	.own {
 		color: var(--indigo50);
 		text-shadow: 0 0 10px var(--indigo50);
+	}
+
+	.tip::after {
+		border-radius: 0%;
+		opacity: 0.2;
+		transform: scale(1);
+		background: var(--neutral600);
+		color: var(--text-strong);
 	}
 
 	.hovered {

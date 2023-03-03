@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Sudoku } from '$lib/components';
 	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import { calculateTip } from '$lib/components/sudoku';
 	import { formatTimeSpan } from '$lib/utils';
 	import { fade } from 'svelte/transition';
 	import Controls from './Controls.svelte';
@@ -12,6 +14,12 @@
 
 	let won = false;
 
+	let tips: number[] = [];
+
+	function getTip() {
+		tips = calculateTip($currentGame.initial, $custom);
+	}
+
 	$: if (won && !$currentGame.endAt) {
 		$currentGame.endAt = new Date();
 	}
@@ -21,30 +29,62 @@
 	<title>Gamez | Sudoku</title>
 </svelte:head>
 
-<div class="wrapper">
-	{#if $view === 'game'}
-		{#if won}
-			<div class="won" in:fade={{ delay: 1000 }}>
-				<div>
-					<h3>solved!</h3>
-					{#if $currentGame.endAt}
-						<p>{formatTimeSpan($currentGame.endAt.getTime() - $currentGame.startedAt.getTime())}</p>
-					{/if}
-					<Button on:click={createNewGame}>new game</Button>
+<div class="outer-wrapper">
+	<div class="help" class:visible={$view === 'game' && !won}>
+		<Button on:click={getTip} style={'background: none; border: none; padding: 0.1em;'}>
+			<Icon size="small" name="help" />
+			tip
+		</Button>
+	</div>
+	<div class="wrapper">
+		{#if $view === 'game'}
+			{#if won}
+				<div class="won" in:fade={{ delay: 1000 }}>
+					<div>
+						<h3>solved!</h3>
+						{#if $currentGame.endAt}
+							<p>
+								{formatTimeSpan($currentGame.endAt.getTime() - $currentGame.startedAt.getTime())}
+							</p>
+						{/if}
+						<Button on:click={createNewGame}>new game</Button>
+					</div>
 				</div>
-			</div>
+			{/if}
+			{#key $currentGame}
+				<Sudoku grid={$currentGame.initial} bind:custom={$custom} bind:won />
+			{/key}
+		{:else if $view === 'settings'}
+			<Settings />
+		{:else if $view === 'statistics'}
+			<Statistics />
 		{/if}
-		<Sudoku grid={$currentGame.initial} bind:custom={$custom} bind:won />
-	{:else if $view === 'settings'}
-		<Settings />
-	{:else if $view === 'statistics'}
-		<Statistics />
-	{/if}
+	</div>
 </div>
 
 <Controls />
 
 <style>
+	.outer-wrapper {
+		position: relative;
+	}
+
+	.help {
+		position: absolute;
+		left: 0.5em;
+		z-index: -1;
+		padding: 10px;
+		opacity: 0;
+		transition: bottom 0.3s ease, opacity 0.1s ease;
+		bottom: 1em;
+	}
+
+	.help.visible {
+		bottom: -2.5em;
+		z-index: 5;
+		opacity: 1;
+	}
+
 	.won {
 		position: absolute;
 		width: 100%;

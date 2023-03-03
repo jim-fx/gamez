@@ -13,6 +13,7 @@
 		| 'circle-x'
 		| 'grid-dots'
 		| 'reload'
+		| 'help'
 		| 'menu-2';
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 
@@ -47,6 +48,8 @@
 	<div class="i-tabler-grid-dots" style="width: {width}px; height: {width}px" />
 {:else if name === 'reload'}
 	<div class="i-tabler-reload" style="width: {width}px; height: {width}px" />
+{:else if name === 'help'}
+	<div class="i-tabler-help" style="width: {width}px; height: {width}px" />
 {/if}
 
 <style>

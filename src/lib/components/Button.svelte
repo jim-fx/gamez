@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
+	export let style = '';
+	export let noise = false;
+
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
@@ -8,7 +11,7 @@
 	}
 </script>
 
-<button on:click={handleClick}>
+<button class:noise on:click={handleClick} {style}>
 	<slot />
 </button>
 
@@ -27,7 +30,7 @@
 		cursor: pointer;
 	}
 
-	button::after {
+	button.noise::after {
 		content: '';
 		position: absolute;
 		width: 100%;

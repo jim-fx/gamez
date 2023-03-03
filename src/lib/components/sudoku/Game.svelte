@@ -7,6 +7,7 @@
 
 	export let grid: number[] = [];
 	export let custom: number[] = Array({ length: 81 }).map(() => 0);
+	export let tips: ([number, number] | null)[] = [];
 	export let won = false;
 
 	$: errors = findSudokuErrors(grid, custom);
@@ -79,4 +80,4 @@
 <RadialMenu rotation={180} target={checkTarget} {items} on:select={handleSelect} />
 <svelte:window on:mouseup={() => context.activeIndex.set(-1)} />
 
-<Grid {grid} bind:custom {errors} />
+<Grid {grid} bind:custom {errors} {tips} />
