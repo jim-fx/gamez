@@ -3,7 +3,7 @@
 	import BallComponent from './Ball.svelte';
 	import { arrayToMap } from './utils';
 	import Arrow from './Arrow.svelte';
-	import { fade, scale } from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 	export let width: number = 5;
 	export let height: number = 5;
 	export let cells: number[];
@@ -28,11 +28,13 @@
 `}
 >
 	{#if arrow}
-		<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
+		{#key arrow}
+			<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
+		{/key}
 	{/if}
 	{#each cells as cell, i}
 		{#if animate}
-			<span in:scale={{ delay: i * 10 }}>
+			<span in:scale={{ delay: i * 20 }}>
 				<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
 			</span>
 		{:else}
@@ -47,8 +49,5 @@
 		display: grid;
 		grid-gap: 0;
 		width: fit-content;
-	}
-	span {
-		pointer-events: none;
 	}
 </style>

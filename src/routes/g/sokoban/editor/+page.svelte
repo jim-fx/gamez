@@ -43,9 +43,10 @@
 <Editor bind:state={$state} />
 
 <style>
-	:global(body) {
+	:global(main) {
 		display: grid;
-		place-items: center;
+		padding-top: 20vh;
+		justify-content: center;
 	}
 	input {
 		width: fit-content;

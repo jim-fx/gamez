@@ -58,7 +58,7 @@
 		display: flex;
 		color: var(--neutral100);
 		border: 1px solid var(--outline);
-		border-radius: 0.5em;
+		border-radius: 1em;
 		overflow: hidden;
 		background: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 	}

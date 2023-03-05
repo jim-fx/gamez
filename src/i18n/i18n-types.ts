@@ -44,6 +44,10 @@ type RootTranslation = {
 	 * N​o​c​h​m​a​l​ ​v​e​r​s​u​c​h​e​n
 	 */
 	try_again: string
+	/**
+	 * N​ä​c​h​s​t​e​s​ ​L​e​v​e​l
+	 */
+	next_level: string
 	time: {
 		/**
 		 * {​d​a​y​s​}​ ​{​{​T​a​g​|​T​a​g​e​}​}
@@ -99,6 +103,10 @@ export type TranslationFunctions = {
 	 * Nochmal versuchen
 	 */
 	try_again: () => LocalizedString
+	/**
+	 * Nächstes Level
+	 */
+	next_level: () => LocalizedString
 	time: {
 		/**
 		 * {days} {{Tag|Tage}}

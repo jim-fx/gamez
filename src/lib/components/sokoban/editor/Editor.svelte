@@ -1,77 +1,35 @@
 <script lang="ts">
-	import Tab from '$lib/components/tab';
-	import localStore from '$lib/localStore';
-	import type { Writable } from 'svelte/store';
-	import Icon from '../Icon.svelte';
-	import { colors } from './constants';
-	import type { BoardState } from './core';
-	import Game from './Game.svelte';
-	import { arrayToMap, trimBoardState } from './utils';
+	import { colors } from '../constants';
+	import type { BoardState } from '../core';
+	import Game from '../Game.svelte';
+	import { arrayToMap } from '../utils';
+	import Controls from './Controls.svelte';
+	import { activeView } from './stores';
 
 	export let state: BoardState;
 
-	const activeView: Writable<'map' | 'game'> = localStore('sokoban-editor-view', 'map');
+	let showIndeces = false;
 
 	$: amount = state.width * state.height;
 	$: ballAmount = state.balls.length;
-	let _ballAmount = ballAmount;
-
-	function updateBallAmount() {
-		if (_ballAmount === 0) return;
-		if (_ballAmount < ballAmount) {
-			state.balls = state.balls.slice(0, _ballAmount);
-		} else {
-			state.balls = state.balls.concat(
-				Array.from({ length: _ballAmount - ballAmount }, () => ({ start: 0, target: 0 }))
-			);
-		}
-	}
 
 	let gameSteps = 0;
+	let gameWon = false;
 
-	$: if (state.cells.includes(undefined)) {
-		state.cells = state.cells.map((v) => (Boolean(v) ? 1 : 0));
-	}
-
-	$: if (state.steps.best >= state.steps.worst - 1) {
-		state.steps.worst = state.steps.best + 1;
-	}
-
-	let _width = state.width;
-	let _height = state.height;
-	$: if (state.height !== _height || state.width !== _width) {
-		if (state.height !== _height) {
-			state.balls = state.balls.map((b) => {
-				if (b.target >= _width * _height) {
-					b.target = -1;
-				}
-				if (b.start >= _width * _height) {
-					b.start = -1;
-				}
-				return b;
-			});
-		}
-
-		// state.balls = state.balls.map((b) => {
-		// });
-
-		const cells = new Array(state.width * state.height).fill(0).map((_, i) => {
-			const nx = i % state.width;
-			const ny = Math.floor(i / state.width);
-			if (nx < _width && ny < _height) {
-				const index = ny * _width + nx;
-				return state.cells[index];
+	$: if (state.cells.length) {
+		state.balls = state.balls.map((b) => {
+			if (b.target >= state.width * state.height || state.cells[b.target] === 0) {
+				b.target = -1;
 			}
-			return 0;
+			if (b.start >= state.width * state.height || state.cells[b.start] === 0) {
+				b.start = -1;
+			}
+			return b;
 		});
-		state.cells = cells;
-		_width = state.width;
-		_height = state.height;
 	}
 
-	$: if (_ballAmount !== ballAmount) {
-		updateBallAmount();
-		_ballAmount = ballAmount;
+	$: if (gameSteps !== 0 && gameWon && state.steps.best > gameSteps) {
+		state.steps.best = gameSteps;
 	}
 
 	$: balls = arrayToMap(
@@ -95,6 +53,7 @@
 			type: target,
 			index
 		};
+		console.log('setDragTarget', dragTarget);
 	}
 
 	function handleDragOver(ev: DragEvent) {
@@ -118,6 +77,8 @@
 			}
 
 			let ball = state.balls[targetIndex] || {};
+
+			console.log('handleDrop', { index, ball, dragTarget });
 
 			if (type === 'ball') {
 				ball.start = index;
@@ -152,13 +113,13 @@
 		setTimeout(() => {
 			if (dragTarget) {
 				const ball = state.balls[dragTarget.index];
-				console.log('dragTarget', ball);
+				console.log('handleBodyDrop', ball);
 				if (!ball) return;
 				if (dragTarget.type === 'ball') {
-					ball.start = null;
+					ball.start = -1;
 				}
 				if (dragTarget.type === 'target') {
-					ball.target = null;
+					ball.target = -1;
 				}
 				if (ball.start === null && ball.target === null) {
 					state.balls.splice(dragTarget.index, 1);
@@ -173,6 +134,28 @@
 
 <div class="wrapper" class:view-map={$activeView === 'map'} style="">
 	<div>
+		{#if $activeView === 'map'}
+			<div class="outer-ball-wrapper">
+				{#each Array.from({ length: ballAmount }) as _, index}
+					<div class="ball-wrapper">
+						<div
+							class="ball"
+							draggable="true"
+							class:visible={![...balls.values()].includes(index)}
+							on:dragstart={() => setDragTarget('ball', index)}
+							style={`--color: var(--${colors[index]}50)`}
+						/>
+						<div
+							class="target"
+							draggable="true"
+							class:visible={![...targets.values()].includes(index)}
+							on:dragstart={() => setDragTarget('target', index)}
+							style={`--color: var(--${colors[index]}50)`}
+						/>
+					</div>
+				{/each}
+			</div>
+		{/if}
 		<div class="grid" style={`--width: ${state.width}; --height: ${state.height}`}>
 			{#each Array.from({ length: amount }) as _, index}
 				<div
@@ -202,96 +185,15 @@
 			{/each}
 		</div>
 		{#if $activeView === 'game'}
-			<Game {state} bind:steps={gameSteps} />
+			<Game {state} bind:steps={gameSteps} bind:won={gameWon} />
 		{/if}
-		<div class="controls">
-			<div class="controls-header">
-				<Tab bind:value={$activeView} showActiveState contentStyle={'padding: 0.7em'}>
-					<Tab.Content value="map"><Icon size="small" name="edit" /></Tab.Content>
-					<Tab.Content value="game"><Icon size="small" name="player-play" /></Tab.Content>
-				</Tab>
-				{#if $activeView === 'game'}
-					{gameSteps}
-				{/if}
-				{#if $activeView === 'map'}
-					<button on:click={() => (state = trimBoardState(state))}>trim</button>
-				{/if}
-			</div>
-			<br />
-			{#if $activeView === 'map'}
-				<label for="height">Height</label>
-				<input id="height" type="number" bind:value={state.height} min="2" max="20" step="1" />
-				<br />
-				<label for="width">Width</label>
-				<input id="width" type="number" bind:value={state.width} min="2" max="20" step="1" />
-
-				<br />
-				<label for="balls">Balls</label>
-				<input id="balls" type="number" bind:value={_ballAmount} min="1" max="4" step="1" />
-
-				{#each Array.from({ length: ballAmount }) as _, index}
-					<div class="ball-wrapper">
-						<div
-							class="ball"
-							draggable="true"
-							class:visible={![...balls.values()].includes(index)}
-							on:dragstart={() => setDragTarget('ball', index)}
-							style={`--color: var(--${colors[index]}50)`}
-						/>
-						<div
-							class="target"
-							draggable="true"
-							class:visible={![...targets.values()].includes(index)}
-							on:dragstart={() => setDragTarget('target', index)}
-							style={`--color: var(--${colors[index]}50)`}
-						/>
-					</div>
-				{/each}
-			{/if}
-
-			{#if $activeView === 'game'}
-				<label for="difficulty">Difficulty</label>
-				<br />
-				<input
-					id="difficulty"
-					type="number"
-					bind:value={state.difficulty}
-					min="0"
-					max="5"
-					step="1"
-				/>
-
-				<br />
-				<br />
-				<label for="best-steps">Best Steps</label>
-				<br />
-				<input
-					id="best-steps"
-					type="number"
-					bind:value={state.steps.best}
-					step="1"
-					min="0"
-					max="50"
-				/>
-				<br />
-				<br />
-				<label for="worst-steps">Worst Steps</label>
-				<br />
-				<input
-					id="worst-steps"
-					type="number"
-					bind:value={state.steps.worst}
-					min="0"
-					max="50"
-					step="1"
-				/>
-			{/if}
-		</div>
+		<Controls bind:state {gameSteps} />
 	</div>
 </div>
 
 <style>
 	.wrapper {
+		position: relative;
 		display: grid;
 		justify-content: center;
 		width: fit-content;
@@ -314,11 +216,15 @@
 		pointer-events: auto;
 	}
 
-	.controls-header {
-		display: flex;
-		gap: 10px;
+	.outer-ball-wrapper {
+		position: absolute;
+		right: -110px;
+		border: 1px solid var(--outline);
+		padding: 5px;
+		box-sizing: border-box;
+		top: -1px;
+		background: var(--neutral800);
 	}
-
 	.ball-wrapper {
 		padding: 5px;
 		display: flex;
@@ -363,8 +269,5 @@
 	}
 	.cell.active {
 		background-color: var(--neutral800);
-	}
-	.controls {
-		margin-top: 20px;
 	}
 </style>

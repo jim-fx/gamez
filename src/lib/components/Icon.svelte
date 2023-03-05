@@ -14,6 +14,8 @@
 		| 'grid-dots'
 		| 'reload'
 		| 'help'
+		| 'minus'
+		| 'plus'
 		| 'menu-2';
 	export let size: 'small' | 'medium' | 'large' = 'medium';
 
@@ -50,6 +52,10 @@
 	<div class="i-tabler-reload" style="width: {width}px; height: {width}px" />
 {:else if name === 'help'}
 	<div class="i-tabler-help" style="width: {width}px; height: {width}px" />
+{:else if name === 'minus'}
+	<div class="i-tabler-minus" style="width: {width}px; height: {width}px" />
+{:else if name === 'plus'}
+	<div class="i-tabler-plus" style="width: {width}px; height: {width}px" />
 {/if}
 
 <style>

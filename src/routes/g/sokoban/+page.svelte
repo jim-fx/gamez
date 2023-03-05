@@ -75,6 +75,7 @@
 	bind:expanded={showLevels}
 	{undoPossible}
 	{redoPossible}
+	bind:showHistoryArrow
 	on:undo={() => undo?.()}
 	on:redo={() => redo?.()}
 />

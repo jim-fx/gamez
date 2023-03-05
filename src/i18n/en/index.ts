@@ -10,6 +10,7 @@ const en = {
   },
   steps: "steps",
   try_again: "try again",
+  next_level: "next level",
   time: {
     days: "{days} {{day|days}}",
     hours: "{hours} {{hour|hours}}",

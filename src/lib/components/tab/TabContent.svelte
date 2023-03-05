@@ -51,7 +51,8 @@
 		position: relative;
 		display: grid;
 		place-items: center;
-		transition: color 0.2s ease, background-color 0.2s ease;
+		opacity: 1;
+		transition: color 0.2s ease, background-color 0.2s ease, opacity 0.3s ease;
 	}
 
 	.active {

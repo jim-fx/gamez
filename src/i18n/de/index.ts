@@ -10,6 +10,7 @@ const de = {
   },
   steps: "Schritte",
   try_again: "Nochmal versuchen",
+  next_level: "Nächstes Level",
   time: {
     days: "{days} {{Tag|Tage}}",
     hours: "{hours} {{Stunde|Stunden}}",

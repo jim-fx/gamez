@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Icon from '$lib/components/Icon.svelte';
 	import { Preview } from '$lib/components/sokoban';
 	import Stars from '$lib/components/star/Stars.svelte';
@@ -35,9 +36,13 @@
 	<div class="controls-header">
 		<Tab
 			contentStyle={`padding: 0.8em;`}
-			style={`border: none; border-radius: 0px; max-width: ${
-				expanded ? '300px' : '100%'
-			}; width: 100%;`}
+			style={`
+        border: none; 
+        border-radius: 0px; 
+        max-width: ${expanded ? '300px' : '100%'}; 
+        width: 100%;
+        justify-content: space-between;
+      `}
 		>
 			<Tab.Content
 				disabled={!expanded && !undoPossible}
@@ -58,17 +63,15 @@
 				</Tab.Content>
 			</div>
 
-			<div class="tab" class:visible={!expanded}>
-				<Tab.Content
-					disabled={!redoPossible}
-					on:click={() => dispatch('redo')}
-					on:mouseover={() => (showHistoryArrow = 'redo')}
-					on:focus={() => (showHistoryArrow = 'redo')}
-					on:mouseleave={() => (showHistoryArrow = null)}
-				>
-					<Icon name="arrow-right" size="small" />
-				</Tab.Content>
-			</div>
+			<Tab.Content
+				disabled={!expanded && !redoPossible}
+				on:click={() => (expanded ? goto('/g/sokoban/editor') : dispatch('redo'))}
+				on:mouseover={() => (showHistoryArrow = 'redo')}
+				on:focus={() => (showHistoryArrow = 'redo')}
+				on:mouseleave={() => (showHistoryArrow = null)}
+			>
+				<Icon name={expanded ? 'edit' : 'arrow-right'} size="small" />
+			</Tab.Content>
 		</Tab>
 	</div>
 	<div class="controls-difficulty" />

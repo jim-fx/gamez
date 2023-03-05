@@ -5,6 +5,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from '$lib/components/Icon.svelte';
+	import Tab from '$lib/components/tab';
 
 	export let rating: number;
 	export let steps: number;
@@ -18,22 +19,26 @@
 		<Stars {rating} animate delay={1750} />
 	</span>
 	<p in:scale={{ delay: 1900 }}>{steps} {$LL.steps()}</p>
-	<div class="actions">
-		<span class="won-actions" in:scale={{ delay: 2000 }}>
+	<div class="actions" in:scale={{ delay: 2000 }}>
+		<Tab
+			noise
+			style="border-radius: 20px;"
+			contentStyle="font-size: 0.8em; display: flex; gap: 10px; padding: 10px;"
+		>
 			{#if rating < 3}
-				<Button on:click={() => dispatch('restart')}>
+				<Tab.Content on:click={() => dispatch('restart')}>
 					<Icon name="reload" size="small" />
 					{$LL.try_again()}
-				</Button>
+				</Tab.Content>
 			{/if}
 
 			<span in:scale={{ delay: 2200 }}>
-				<Button on:click={() => dispatch('nextlevel')}>
-					next level
+				<Tab.Content on:click={() => dispatch('nextlevel')}>
+					{$LL.next_level()}
 					<Icon name="arrow-right" size="small" />
-				</Button>
+				</Tab.Content>
 			</span>
-		</span>
+		</Tab>
 	</div>
 </div>
 
@@ -62,8 +67,7 @@
 		white-space: nowrap;
 	}
 
-	.won-actions {
-		display: flex;
-		gap: 2rem;
+	.won > .actions {
+		margin-top: 40px;
 	}
 </style>

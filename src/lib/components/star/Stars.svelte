@@ -10,7 +10,7 @@
 
 	let visible = false;
 
-	import star from './star.png';
+	import star from './star.svg';
 
 	function handleClick(index: number) {
 		if (!interactive) return;
