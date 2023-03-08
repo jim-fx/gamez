@@ -49,6 +49,15 @@
 	}
 </script>
 
+<svelte:head>
+	<script
+		async
+		defer
+		src="https://analytics.umami.is/script.js"
+		data-website-id="3929a322-b527-4134-8d06-9d7799748232"
+	></script>
+</svelte:head>
+
 <RadialMenu target={checkTarget} {items} on:select={handleSelect} />
 {#key data.pathname}
 	<main bind:this={body} in:fade={{ duration: 200, delay: 200 }} out:fade={{ duration: 100 }}>

@@ -4,6 +4,7 @@
 
 	export let value: string | undefined = undefined;
 	export let disabled = false;
+	export let style = '';
 
 	const ctx = getContext();
 	const activeIndex = ctx.activeTab;
@@ -26,7 +27,10 @@
 <div
 	class="tab-content-wrapper"
 	class:disabled
-	style={ctx.contentStyle}
+	style={(style + '' + ctx.contentStyle)
+		.split(';')
+		.filter((v) => v.length)
+		.join(';')}
 	on:mouseover={() => dispatch('mouseover')}
 	on:focus={() => dispatch('mouseover')}
 	on:mouseleave={() => dispatch('mouseleave')}

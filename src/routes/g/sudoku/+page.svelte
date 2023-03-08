@@ -18,10 +18,16 @@
 
 	function getTip() {
 		tips = calculateTip($currentGame.initial, $custom);
+		tips.forEach((tip, i) => {
+			if (tip) {
+				$custom[i] = tip;
+			}
+		});
 	}
 
 	$: if (won && !$currentGame.endAt) {
 		$currentGame.endAt = new Date();
+		console.log('Set endAT', $currentGame);
 	}
 </script>
 
@@ -34,6 +40,10 @@
 		<Button on:click={getTip} style={'background: none; border: none; padding: 0.1em;'}>
 			<Icon size="small" name="help" />
 			tip
+		</Button>
+		<Button on:click={createNewGame} style={'background: none; border: none; padding: 0.1em;'}>
+			<Icon size="small" name="help" />
+			new game
 		</Button>
 	</div>
 	<div class="wrapper">
@@ -71,6 +81,8 @@
 
 	.help {
 		position: absolute;
+		display: flex;
+		gap: 20px;
 		left: 0.5em;
 		z-index: -1;
 		padding: 10px;
@@ -82,7 +94,7 @@
 	.help.visible {
 		bottom: -2.5em;
 		z-index: 5;
-		opacity: 1;
+		opacity: 0.5;
 	}
 
 	.won {

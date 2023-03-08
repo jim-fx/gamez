@@ -1,5 +1,5 @@
 import { withSubComponents } from "$lib/utils";
-import Tab from "./Tab.svelte";
 import TabContent from "./TabContent.svelte";
+import TabWrapper from "./TabWrapper.svelte";
 
-export default withSubComponents(Tab, { Content: TabContent });
+export default withSubComponents(TabWrapper, { Content: TabContent });

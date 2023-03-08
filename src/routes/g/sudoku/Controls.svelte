@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Icon from '$lib/components/Icon.svelte';
 	import Tab from '$lib/components/tab';
-	import { cubicOut } from 'svelte/easing';
 	import { view } from './stores';
 
 	import { custom } from './stores';
@@ -17,25 +16,14 @@
 		undoPossible = custom.previousValue !== null;
 	}
 
-	function scale(
-		node: HTMLElement,
-		{ delay = 0, duration = 400, easing = cubicOut, start = 0, opacity = 0 } = {}
-	) {
-		const style = getComputedStyle(node);
-		const target_opacity = +style.opacity;
-		const transform = style.transform === 'none' ? '' : style.transform;
-		const sd = 1 - start;
-		const od = target_opacity * (1 - opacity);
-		return {
-			delay,
-			duration,
-			easing: easing,
-			css: (_t: number, u: number) => `
-        transform: ${transform} scaleX(${1 - sd * u});
-        opacity: ${target_opacity - od * u}
-      `
-		};
-	}
+	$: tabStyle = `
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin 0.3s ease, opacity 0.3s ease;
+    width: ${$view === 'game' ? '18px' : '0px'} !important;
+    padding: ${$view === 'game' ? '0.8em' : '0.8em 0em'} !important;
+    opacity: ${$view === 'game' ? '1' : '0'} !important;
+    margin: ${$view === 'game' ? '0em' : '-1px'} !important;
+    pointer-events: ${$view === 'game' ? 'auto' : 'none'} !important;
+  `;
 </script>
 
 <div class="wrapper">
@@ -46,23 +34,15 @@
 		contentStyle={`padding: 0.8em;`}
 		style={`border-radius: 20px; `}
 	>
-		{#if $view === 'game'}
-			<div transition:scale style={`transform-origin: 100% 0%`}>
-				<Tab.Content on:click={() => custom.undo()} disabled={!undoPossible}
-					><Icon size="small" name="arrow-left" /></Tab.Content
-				>
-			</div>
-		{/if}
+		<Tab.Content style={tabStyle} on:click={() => custom.undo()} disabled={!undoPossible}>
+			<Icon size="small" name="arrow-left" />
+		</Tab.Content>
 		<Tab.Content value="settings"><Icon size="small" name="settings" /></Tab.Content>
 		<Tab.Content value="game"><Icon size="small" name="grid-dots" /></Tab.Content>
 		<Tab.Content value="statistics"><Icon size="small" name="chart-area-line" /></Tab.Content>
-		{#if $view === 'game'}
-			<div transition:scale style={`transform-origin: 0% 0%`}>
-				<Tab.Content on:click={() => custom.redo()} disabled={!redoPossible}
-					><Icon size="small" name="arrow-right" /></Tab.Content
-				>
-			</div>
-		{/if}
+		<Tab.Content style={tabStyle} on:click={() => custom.redo()} disabled={!redoPossible}>
+			<Icon size="small" name="arrow-right" />
+		</Tab.Content>
 	</Tab>
 </div>
 

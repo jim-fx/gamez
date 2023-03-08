@@ -20,7 +20,7 @@ type Settings = {
 
 export const games = localStore<Game[]>("sudoku-game-history", []);
 
-export const settings = writable<Settings>({ difficulty: "easy" })
+export const settings = localStore<Settings>("sudoku-settings", { difficulty: "easy" })
 
 export const currentGame = localStore<Game>("sudoku-current-game", {
   startedAt: new Date(),
@@ -34,12 +34,14 @@ export function createNewGame() {
   const _current = { ...get(currentGame), final: get(custom), endAt: new Date() };
   const _settings = get(settings);
 
+
   const newGame = {
     difficulty: _settings.difficulty,
     startedAt: new Date(),
     initial: genSudoku(_settings.difficulty)
   }
 
+  console.trace("New Game", { newGame, _current });
   custom.set([]);
   currentGame.set(newGame);
 

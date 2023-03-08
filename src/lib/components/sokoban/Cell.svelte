@@ -34,9 +34,8 @@
 		class:target={target >= 0}
 		style={` 
       --target-color: var(--${colors[target]}50);
-      border-radius:  ${borderRadius}
       --border-radius: ${borderRadius};
-
+      border-radius:  ${borderRadius}
       border-color: var(--outline);
     `}
 	/>

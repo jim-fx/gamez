@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade, scale } from 'svelte/transition';
 	import { getContext } from './context';
 
 	export let index: number;
@@ -59,7 +60,12 @@
 	{#if showIndeces}
 		<span class="index">{index}</span>
 	{/if}
-	{value || ''}
+	<span
+		out:scale={{ duration: 200 }}
+		in:scale={{ duration: 200, delay: Math.hypot(row - 4.5, col - 4.5) * 50 + Math.random() * 20 }}
+	>
+		{value || ''}
+	</span>
 </div>
 
 <style>

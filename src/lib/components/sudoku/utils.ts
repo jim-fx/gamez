@@ -100,15 +100,16 @@ export function calculateTip(initialGrid: number[], userGrid: number[]) {
       currentCell.delete(values[squareIndex]);
     }
 
+
+
+    cells.forEach((cell, i) => {
+      if (cell?.size === 1) {
+        tips[i] = Array.from(cell)[0];
+      }
+    })
+
+    return tips;
   }
-
-  cells.forEach((cell, i) => {
-    if (cell?.size === 1) {
-      tips[i] = Array.from(cell)[0];
-    }
-  })
-
-  return tips;
 }
 
 export function genSudoku(difficulty: "easy" | "medium" | "hard" | "expert") {

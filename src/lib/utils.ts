@@ -21,7 +21,7 @@ export function hashString(str: string) {
   return hash.toString(36);
 }
 
-export function formatTimeSpan(milliseconds: number): string {
+export function formatTimeSpan(milliseconds: number, format: "humane" | "simple" = "humane"): string {
 
   const _ = get(LL);
 
@@ -35,6 +35,10 @@ export function formatTimeSpan(milliseconds: number): string {
   const remainingSeconds = seconds % 60;
 
   const parts = [];
+
+  if (format === "simple") {
+    return `${days > 0 ? days + "d " : ""}${remainingHours.toString().padStart(2, "0")}:${remainingMinutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+  }
 
   if (days > 0) {
     parts.push(`${_.time.days({ days })}`);
