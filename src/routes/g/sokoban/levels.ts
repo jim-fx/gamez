@@ -3,6 +3,7 @@ export default [
   'EwFgnADCDMEIx2NRwEFYEnkA',
   'EwFgHADMDMCMsFYTWPIA',
   'EzCsAYGZPBGY6VrCsAscg',
+  "EwVgZgDALFGhBGYCDMKEKhxTFA",
   "EwVghgDALAzMCMwb3hBMRSA",
   'EwZgnADCAsEIyziOcCs87A5oA',
   "EwVgZgDALFGhBGKDgGYmISxQ",
