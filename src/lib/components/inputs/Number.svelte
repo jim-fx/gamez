@@ -7,7 +7,7 @@
 	export let min = 0;
 	export let max = 10;
 	export let id: string;
-	export let label: string | undefined;
+	export let label: string | undefined = undefined;
 
 	const dispatch = createEventDispatcher();
 

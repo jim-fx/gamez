@@ -63,7 +63,17 @@ export function formatTimeSpan(milliseconds: number, format: "humane" | "simple"
   return parts.join(', ');
 }
 
-
+export function copyToClipboard(str: string): void {
+  const el = document.createElement('textarea');  // Create a temporary textarea element
+  el.value = str;  // Set the value of the element to the string
+  el.setAttribute('readonly', '');  // Make the element read-only to prevent user input
+  el.style.position = 'absolute';  // Set the position of the element to be off-screen
+  el.style.left = '-9999px';  // Move the element off-screen
+  document.body.appendChild(el);  // Append the element to the document body
+  el.select();  // Select the text inside the element
+  document.execCommand('copy');  // Execute the copy command
+  document.body.removeChild(el);  // Remove the element from the document body
+}
 export function compareArrays(arr1: number[], arr2: number[]) {
   if (arr1.length !== arr2.length) return false;
   for (let i = 0; i < arr1.length; i++) {

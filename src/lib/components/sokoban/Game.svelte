@@ -211,5 +211,6 @@
 <style>
 	.gamer-wrapper {
 		z-index: 0;
+		margin: 0 auto;
 	}
 </style>

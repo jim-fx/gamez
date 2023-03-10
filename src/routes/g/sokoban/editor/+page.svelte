@@ -1,19 +1,12 @@
 <script lang="ts">
+	import Button from '$lib/components/Button.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 	import { decodeSokobanBoard, Editor, encodeSokobanBoard } from '$lib/components/sokoban';
-	import type { BoardState } from '$lib/components/sokoban/core';
-	import localStore from '$lib/localStore';
+	import Tab from '$lib/components/tab';
+	import { copyToClipboard } from '$lib/utils';
+	import Levels from './Levels.svelte';
+	import { state } from './stores';
 
-	const state = localStore<BoardState>('sokoban-editor-state', {
-		width: 5,
-		height: 5,
-		cells: [],
-		balls: [],
-		steps: {
-			best: 0,
-			worst: 0
-		},
-		difficulty: 0
-	});
 	let encoded = encodeSokobanBoard($state);
 	let oldEncoded = encoded;
 
@@ -39,25 +32,43 @@
 	}
 </script>
 
-<input bind:value={encoded} />
+<div class="copy-level">
+	<Tab contentStyle="padding: 0px;">
+		<Tab.Content>
+			<input bind:value={encoded} />
+		</Tab.Content>
+		<Tab.Content>
+			<Button style="background: none; border: none;" on:click={() => copyToClipboard(encoded)}>
+				<Icon size="small" name="copy" />
+			</Button>
+		</Tab.Content>
+	</Tab>
+</div>
+
+<Levels bind:state={$state} current={encoded} />
+
 <Editor bind:state={$state} />
 
 <style>
 	:global(main) {
 		display: grid;
-		padding-top: 20vh;
-		justify-content: center;
+		grid-template-columns: max-content 1fr;
+		grid-template-rows: 1fr 300px;
+		grid-template-areas: 'levels editor' 'levels controls';
 	}
 	input {
 		width: fit-content;
+		padding: 5px;
+		background: none;
+		border: none;
+		color: var(--text);
+		text-overflow: ellipsis;
+	}
+
+	.copy-level {
 		max-width: 50%;
 		position: fixed;
 		top: 10px;
-		left: 10px;
-		border-radius: 5px;
-		padding: 5px;
-		background: var(--neutral800);
-		border: 1px solid var(--outline);
-		color: var(--text);
+		right: 10px;
 	}
 </style>

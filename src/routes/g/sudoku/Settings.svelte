@@ -32,15 +32,13 @@
 		display: grid;
 		grid-template-columns: max-content 1fr;
 		grid-template-rows: repeat(auto-fill, minmax(0px, max-content));
-	}
-
-	.content {
 		height: fit-content;
 		border-bottom: 1px solid var(--outline);
 	}
 
 	p {
 		padding: 1em;
+		opacity: 0.5;
 		margin: 0;
 		color: var(--text);
 		border-right: 1px solid var(--outline);

@@ -9,7 +9,6 @@ const storeIds: Map<string, ReturnType<typeof createLocalStore>> = new Map();
 
 const HAS_LOCALSTORAGE = "localStorage" in globalThis;
 
-
 function createLocalStore<T>(key: string, initialValue: T | Writable<T>) {
 
   let store: Writable<T>;

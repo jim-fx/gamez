@@ -76,40 +76,42 @@
 	</div>
 	<div class="controls-difficulty" />
 	{#if expanded}
-		<table class="controls-level-wrapper">
-			{#each levels as level, i}
-				<tr
-					class="controls-level"
-					on:click={() => {
-						$currentLevel = i;
-						expanded = false;
-					}}
-					on:keydown={(e) => {
-						if (e.key === 'Enter') {
+		<div class="scroll-wrapper">
+			<table class="controls-level-wrapper">
+				{#each levels as level, i}
+					<tr
+						class="controls-level"
+						on:click={() => {
 							$currentLevel = i;
 							expanded = false;
-						}
-					}}
-					class:active={$currentLevel === i}
-					class:locked={maxLevel < i}
-				>
-					<td>
-						{#if maxLevel < i}
-							<div class="lock">
-								<Icon name="lock" size="medium" />
-							</div>
-						{/if}
-						<h3>Level {i + 1}</h3>
-					</td>
-					<td>
-						<Stars rating={calculateLevelRating(level, i, savedGames)} size="small" />
-					</td>
-					<td class="preview">
-						<Preview {level} />
-					</td>
-				</tr>
-			{/each}
-		</table>
+						}}
+						on:keydown={(e) => {
+							if (e.key === 'Enter') {
+								$currentLevel = i;
+								expanded = false;
+							}
+						}}
+						class:active={$currentLevel === i}
+						class:locked={maxLevel < i}
+					>
+						<td>
+							{#if maxLevel < i}
+								<div class="lock">
+									<Icon name="lock" size="medium" />
+								</div>
+							{/if}
+							<h3>Level {i + 1}</h3>
+						</td>
+						<td>
+							<Stars rating={calculateLevelRating(level, i, savedGames)} size="small" />
+						</td>
+						<td class="preview">
+							<Preview {level} />
+						</td>
+					</tr>
+				{/each}
+			</table>
+		</div>
 	{/if}
 </div>
 
@@ -137,16 +139,21 @@
 	}
 
 	.controls-level-wrapper {
-		width: 300px;
 		border-collapse: collapse;
 	}
 
+	.scroll-wrapper {
+		overflow-y: auto;
+		max-height: 100%;
+		width: 300px;
+		display: inherit;
+		overflow-y: auto;
+	}
+
 	.controls-level {
-		position: relative;
 		cursor: pointer;
 		height: 80px;
 		border-bottom: 1px solid var(--outline);
-		align-items: center;
 	}
 
 	.preview > :global(.grid) {
