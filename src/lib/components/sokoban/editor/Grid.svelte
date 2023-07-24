@@ -103,7 +103,7 @@
 </script>
 
 <svelte:body on:dragover={handleDragOver} on:drop={handleBodyDrop} />
-<div class="wrapper" class:hidden={$activeView !== 'map'} out:fade={{ duration: 300 }}>
+<div class="wrapper" class:hidden={$activeView !== 'map'} out:fade|global={{ duration: 300 }}>
 	<div
 		class="grid"
 		class:visible={$activeView === 'map'}

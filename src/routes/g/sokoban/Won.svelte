@@ -13,13 +13,13 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="won" in:fade={{ delay: 1000 }}>
-	<h2 in:scale={{ delay: 1500 }}>{$LL.rating[rating.toString()]()}</h2>
-	<span in:scale={{ delay: 1750 }}>
+<div class="won" in:fade|global={{ delay: 1000 }}>
+	<h2 in:scale|global={{ delay: 1500 }}>{$LL.rating[rating.toString()]()}</h2>
+	<span in:scale|global={{ delay: 1750 }}>
 		<Stars {rating} animate delay={1750} />
 	</span>
-	<p in:scale={{ delay: 1900 }}>{steps} {$LL.steps()}</p>
-	<div class="actions" in:scale={{ delay: 2000 }}>
+	<p in:scale|global={{ delay: 1900 }}>{steps} {$LL.steps()}</p>
+	<div class="actions" in:scale|global={{ delay: 2000 }}>
 		<Tab
 			noise
 			style="border-radius: 20px;"
@@ -32,7 +32,7 @@
 				</Tab.Content>
 			{/if}
 
-			<span in:scale={{ delay: 2200 }}>
+			<span in:scale|global={{ delay: 2200 }}>
 				<Tab.Content on:click={() => dispatch('nextlevel')}>
 					{$LL.next_level()}
 					<Icon name="arrow-right" size="small" />

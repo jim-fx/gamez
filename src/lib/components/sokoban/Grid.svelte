@@ -34,7 +34,7 @@
 	{/key}
 	{#each cells as cell, i}
 		{#if animate}
-			<span in:scale={{ delay: i * 20 }}>
+			<span in:scale|global={{ delay: i * 20 }}>
 				<Cell visible={cell === 1} index={i} target={_targets.get(i)} />
 			</span>
 		{:else}

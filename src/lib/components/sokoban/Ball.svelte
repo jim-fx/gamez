@@ -80,7 +80,7 @@
 	class:hovered={mouseDown}
 >
 	{#if animate}
-		<span in:scale={{ delay: _position * 10 }}>
+		<span in:scale|global={{ delay: _position * 10 }}>
 			<div class="ball" class:isAtTarget {style} />
 		</span>
 	{:else}

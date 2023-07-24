@@ -58,7 +58,7 @@
 
 <svg
 	fill="none"
-	out:fade
+	out:fade|global
 	viewBox="0 0 {width * cellSize} {height * cellSize}"
 	xmlns="http://www.w3.org/2000/svg"
 	style={`color: var(--${_color}50)`}

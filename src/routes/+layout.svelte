@@ -60,7 +60,7 @@
 
 <RadialMenu target={checkTarget} {items} on:select={handleSelect} />
 {#key data.pathname}
-	<main bind:this={body} in:fade={{ duration: 200, delay: 200 }} out:fade={{ duration: 100 }}>
+	<main bind:this={body} in:fade|global={{ duration: 200, delay: 200 }} out:fade|global={{ duration: 100 }}>
 		<slot />
 	</main>
 {/key}

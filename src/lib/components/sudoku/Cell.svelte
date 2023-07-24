@@ -61,7 +61,7 @@
 		<span class="index">{index}</span>
 	{/if}
 	<span
-		in:scale={{ duration: 200, delay: Math.hypot(row - 4.5, col - 4.5) * 50 + Math.random() * 20 }}
+		in:scale|global={{ duration: 200, delay: Math.hypot(row - 4.5, col - 4.5) * 50 + Math.random() * 20 }}
 	>
 		{value || ''}
 	</span>

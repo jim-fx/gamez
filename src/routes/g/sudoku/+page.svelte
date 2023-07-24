@@ -50,7 +50,7 @@
 	<NoiseWrapper noise style="min-width: 300px;">
 		{#if $view === 'game'}
 			{#if won}
-				<div class="won" in:fade={{ delay: 1000 }}>
+				<div class="won" in:fade|global={{ delay: 1000 }}>
 					<div>
 						<h3>solved!</h3>
 						{#if $currentGame.endAt}
