@@ -2,5 +2,5 @@
    "baseLocale": "de",
    "adapter": "svelte",
    "esmImports": true,
-   "$schema": "https://unpkg.com/typesafe-i18n@5.24.1/schema/typesafe-i18n.json"
+   "$schema": "https://unpkg.com/typesafe-i18n@5.25.1/schema/typesafe-i18n.json"
 }
