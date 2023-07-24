@@ -169,7 +169,7 @@
 
 		return null;
 	}
-	$: arrow = $selectedItem || showHistoryArrow ? getArrowProps() : null;
+	$: arrow = ($_steps > 0 && $selectedItem) || showHistoryArrow ? getArrowProps() : null;
 
 	function handleSelect(e: CustomEvent) {
 		if (e.detail === 'undo') {

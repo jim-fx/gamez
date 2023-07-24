@@ -27,11 +27,11 @@
     --cell-gradient: linear-gradient(120deg, var(--neutral800), var(--neutral850));
 `}
 >
-	{#if arrow}
-		{#key arrow}
+	{#key arrow}
+		{#if arrow}
 			<Arrow {height} {width} start={arrow?.start} end={arrow?.end} color={arrow?.color} />
-		{/key}
-	{/if}
+		{/if}
+	{/key}
 	{#each cells as cell, i}
 		{#if animate}
 			<span in:scale={{ delay: i * 20 }}>

@@ -85,12 +85,19 @@ export default function historyStore<T>(initialValue: T | Writable<T>, opts: { a
     }
   }
 
+  function reset(v?: T) {
+    history = [];
+    activeIndex.set(0);
+    addValue(v ?? isStore(initialValue) ? get(initialValue) : initialValue);
+  }
+
   return {
     subscribe,
     set,
     update,
     undo,
     redo,
+    reset,
     activeIndex,
     get previousValue() {
       const index = get(activeIndex);

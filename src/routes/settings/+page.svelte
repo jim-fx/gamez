@@ -1,10 +1,11 @@
 <script>
+	import NoiseWrapper from '$lib/components/NoiseWrapper.svelte';
 	import Tab from '$lib/components/tab';
 	import { settings } from '$lib/stores';
 </script>
 
 <div class="outer-wrapper">
-	<div class="wrapper">
+	<NoiseWrapper noise>
 		<div class="header">
 			<h1>Settings</h1>
 		</div>
@@ -22,7 +23,7 @@
 				<Tab.Content value="light">light</Tab.Content>
 			</Tab>
 		</div>
-	</div>
+	</NoiseWrapper>
 </div>
 
 <style>
@@ -32,21 +33,6 @@
 		width: 100vw;
 		display: grid;
 		place-items: center;
-	}
-
-	.wrapper {
-		border-radius: 20px;
-		overflow: hidden;
-		width: fit-content;
-
-		background-image: linear-gradient(-20deg, #16161e 3.85%, #252530 96.92%);
-		background-blend-mode: screen;
-
-		box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.25), 4px 4px 8px rgba(0, 0, 0, 0.2),
-			inset 2px 2px 9px rgba(255, 255, 255, 0.05), inset -2px -2px 9px rgba(0, 0, 0, 0.2);
-
-		/* Outline */
-		outline: 1px solid var(--outline);
 	}
 
 	.content {
